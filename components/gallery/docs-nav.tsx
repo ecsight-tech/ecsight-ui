@@ -9,8 +9,8 @@ import { spring } from "@/lib/motion"
 import { blocks, components } from "@/lib/catalog"
 
 const sections = [
-  { title: "Components", base: "/components", items: components },
-  { title: "Blocks", base: "/blocks", items: blocks },
+  { title: "Components", base: "/docs/components", items: components },
+  { title: "Blocks", base: "/docs/blocks", items: blocks },
 ]
 
 export function DocsNav() {

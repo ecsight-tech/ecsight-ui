@@ -1086,7 +1086,7 @@ export function SidebarExample() {
   return (
     <p className="text-sm text-muted-foreground">
       Sidebar ใช้งานผ่าน block{" "}
-      <Link className="text-primary underline-offset-4 hover:underline" href="/blocks/app-shell">
+      <Link className="text-primary underline-offset-4 hover:underline" href="/docs/blocks/app-shell">
         App Shell
       </Link>{" "}
       เสมอ — ไม่ประกอบเองในแต่ละแอป

@@ -13,13 +13,13 @@ export function generateStaticParams() {
   return components.map((c) => ({ slug: c.slug }))
 }
 
-export async function generateMetadata({ params }: PageProps<"/components/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/docs/components/[slug]">): Promise<Metadata> {
   const { slug } = await params
   const item = components.find((c) => c.slug === slug)
   return { title: item?.title }
 }
 
-export default async function ComponentPage({ params }: PageProps<"/components/[slug]">) {
+export default async function ComponentPage({ params }: PageProps<"/docs/components/[slug]">) {
   const { slug } = await params
   const item = components.find((c) => c.slug === slug)
   if (!item) notFound()
