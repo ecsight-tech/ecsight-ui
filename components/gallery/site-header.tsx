@@ -21,9 +21,9 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 md:px-6">
-        <Link href="/" aria-label="Ecsight DS หน้าแรก" className="flex shrink-0 items-center gap-2 font-semibold">
+        <Link href="/" aria-label="Ecsight UI หน้าแรก" className="flex shrink-0 items-center gap-2 font-semibold">
           <LogoMark className="size-6" />
-          <span className="hidden sm:inline">Ecsight DS</span>
+          <span className="hidden sm:inline">Ecsight UI</span>
         </Link>
         <nav className="-mx-1 flex min-w-0 items-center gap-1 overflow-x-auto px-1 text-sm [scrollbar-width:none]">
           {links.map((l) => {

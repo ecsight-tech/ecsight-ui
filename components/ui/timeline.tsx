@@ -6,6 +6,7 @@ import { cn } from "cn"
 import { formatDate, formatRelative, formatTime } from "@/lib/format"
 import { fadeUp, listStagger } from "@/lib/motion"
 import type { StatusTone } from "@/components/ui/status-badge"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 export type TimelineItem = {
   id: string
@@ -55,13 +56,20 @@ function Timeline({ items, now, className }: { items: TimelineItem[]; now?: Date
           <div className="grid min-w-0 flex-1 gap-0.5 pt-1.5 text-sm">
             <div className="flex items-baseline justify-between gap-3">
               <span className="min-w-0 font-medium">{item.title}</span>
-              <time
-                dateTime={item.time.toISOString()}
-                title={`${formatDate(item.time, { style: "long" })} ${formatTime(item.time)} น.`}
-                className="shrink-0 text-xs text-muted-foreground tabular-nums"
-              >
-                {formatRelative(item.time, now)}
-              </time>
+              {/* exact date-time in the system Tooltip (not the browser's title tooltip); a button so keyboards reach it */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="shrink-0 rounded-sm text-xs text-muted-foreground tabular-nums outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+                  >
+                    <time dateTime={item.time.toISOString()}>{formatRelative(item.time, now)}</time>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {formatDate(item.time, { style: "long" })} {formatTime(item.time)} น.
+                </TooltipContent>
+              </Tooltip>
             </div>
             {item.description && <p className="text-muted-foreground">{item.description}</p>}
           </div>

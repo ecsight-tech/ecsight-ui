@@ -24,7 +24,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Ecsight Design System", template: "%s · Ecsight DS" },
+  title: { default: "Ecsight UI", template: "%s · Ecsight UI" },
   description: "shadcn-based components with motion and Solar icons for Ecsight web apps.",
 };
 

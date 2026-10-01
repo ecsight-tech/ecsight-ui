@@ -1,6 +1,6 @@
-# Ecsight Design System
+# Ecsight UI
 
-> **Version** 0.2 · **Base** shadcn/ui (radix-nova) · **Motion** `motion/react` · **Icons** Solar (`@solar-icons/react`) · **Stack** Next.js App Router + Tailwind CSS v4
+> **Version** 0.5.1 · **Base** shadcn/ui (radix-nova) · **Motion** `motion/react` · **Icons** Solar (`@solar-icons/react`) · **Stack** Next.js App Router + Tailwind CSS v4
 > **Gallery** `/` · **Live demo** `/demo` · **Registry** `/r/{name}.json`
 
 This file is the contract for every Ecsight web app UI. It is written for **AI coding agents first** and for people second.
@@ -18,6 +18,7 @@ If you are an agent: treat every **MUST / MUST NOT** as a hard rule, follow the 
 6. **MUST** write UI copy in Thai by default (see §6.7), with numbers, dates and currency formatted for `th-TH`.
 7. **MUST** give every icon-only button an `aria-label` and (usually) a `Tooltip`.
 8. **MUST** keep one primary (`variant="default"`) button per view region.
+9. **MUST NOT** use the browser's built-in UI: no native `<select>` (use `Select` / `Combobox`), no `title="…"` tooltips (use `Tooltip`), no `<input type="date">` (use `DateInput` / `DatePicker`), no `alert()` / `confirm()` / `prompt()` (use `Dialog` / toast), no `<details>` (use `Accordion`). Wrap third-party widgets that render native controls (e.g. react-day-picker's dropdowns) with the system component.
 
 ---
 
@@ -35,6 +36,18 @@ If you are an agent: treat every **MUST / MUST NOT** as a hard rule, follow the 
 
 ## 2. Setup
 
+### 2.0 With an AI agent (fastest)
+
+This file is served at **`https://ui.1ecsight.com/design.md`**. Works with any agent that can read files and run commands (Claude Code, Cursor, GitHub Copilot, Gemini CLI, Windsurf, …). The overview page has the full **setup prompt** to copy; in short:
+
+> Set up Ecsight UI in this project. Read https://ui.1ecsight.com/design.md and follow it for all UI work, add the `@ecsight` registry to components.json, install `@ecsight/foundation`, wrap the root layout in `<Providers>` with `lang="th"`, and add the Ecsight rule to the project's agent rules file.
+
+Rule line for `CLAUDE.md` / `AGENTS.md` / `.cursor/rules` (the setup prompt adds it):
+
+> For all UI work, follow https://ui.1ecsight.com/design.md. Install components only from the @ecsight registry (`npx shadcn@latest add @ecsight/<name>`) — never hand-roll components, other icon sets, or native browser controls.
+
+The prompt and rule live in `lib/site.ts` (`agentSetupPrompt`, `agentRulesLine`) — change them there, not in copies.
+
 ### 2.1 New app
 
 ```bash
@@ -48,7 +61,7 @@ Add the registry to `components.json`:
 ```json
 {
   "registries": {
-    "@ecsight": "https://ecsight-design-system.vercel.app/r/{name}.json"
+    "@ecsight": "https://ui.1ecsight.com/r/{name}.json"
   }
 }
 ```
@@ -373,6 +386,8 @@ Install: `npx shadcn@latest add @ecsight/<name>`. Live examples and source: `/co
 
 Never show a toast for something the user can already see changed in place.
 
+**Toast anatomy** (built into `Toaster`): tinted icon disc by type (`success` · `error` · `warning` · `info` · loading spinner) → title (`font-medium`, short, past tense: "บันทึกแล้ว") → optional description (what/where: "การเปลี่ยนแปลงมีผลทันที") → optional action button (one verb: "เลิกทำ"). ✕ shows on hover. Plain `toast("…")` has no icon — use it for neutral notices with an action. Don't put long text or links in toasts; if it needs reading, it's an Alert.
+
 ### 5.5 Data display
 
 - **Card**: `CardHeader` (title, description, `CardAction` top-right) → `CardContent` → `CardFooter`.
@@ -509,6 +524,8 @@ AppShell
 
 ## 10. Changelog
 
+- **0.5.3** (2026-10-01) — Overview rebuilt around "easy": 3-step walkthrough (Claude Code desktop → agent does everything → full-stage before/after result), a single progress row under it, and a **Setup prompt** section (works with Claude Code, Cursor, GitHub Copilot, Gemini CLI, Windsurf, v0; prompt + rules-file line to copy; manual CLI install folded into an accordion). Toast restyled on tokens (unstyled sonner): tinted icon disc per type, title/description hierarchy, Button-styled action, hover ✕. Fixes: Calendar month/year dropdowns were unclickable (nav overlay), selected-and-current month cell had invisible text.
+- **0.5.2** (2026-10-01) — Renamed to **Ecsight UI**. Registry/site moves to `https://ui.1ecsight.com` (`lib/site.ts`, overridable with `NEXT_PUBLIC_SITE_URL`). This file is served at `/design.md` for agents. Overview: animated walkthrough of installing and using the system by instructing Claude Code — agent and editor in dark terminals, the app shown only as a before/after at the end, and a camera that zooms onto the active action (finished frames only under reduced motion).
 - **0.5.1** (2026-10-01) — Quality gates: `pnpm test:ui` (Playwright + axe, 220 checks) and `pnpm lint:a11y`. Fixes they found: `--success` / `--destructive` darkened so text on their `/10` tint passes 4.5:1 (was 3.3 / 4.0); new `--warning-foreground`; code blocks use `github-light-high-contrast`; gallery logo link named on mobile; KPI sparklines no longer focusable inside `aria-hidden`; combobox example labelled; login "ลืมรหัสผ่าน" has a real href.
 - **0.5** (2026-10-01) — Data table toolbar: faceted multi-select filters with live counts (`?status=paid,shipped`), show/hide columns remembered per viewer (`useLocalStorage`), floating bulk-action bar (Esc clears), pagination with rows-per-page. `VirtualTable` (10,000 rows). Density: `--control-h` / `--table-*` tokens + compact mode in the account menu, applied before paint. New: `MultiSelect`, `Kbd`, `StatusBadge`, `FileDropzone`, `Stepper`, `Timeline`, KPI sparklines. Shortcuts: ⌘K, `/`, G→X, `?` help (physical keys, so they work on the Thai layout). Thai-first line-height scale; no `leading-none` on Thai. CVD-checked chart palette. Fix: ⌘K palette crashed on open (shadcn v4 `CommandDialog` needs an explicit `<Command>`).
 - **0.4.2** (2026-10-01) — Calendar: month slide animation (single-class keyframes in foundation CSS — react-day-picker toggles them with `classList`), month/year grid panel from the caption, "วันนี้" button; displayed month is now controlled inside Calendar (`month` / `onMonthChange` still work).

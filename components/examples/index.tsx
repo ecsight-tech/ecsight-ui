@@ -956,8 +956,14 @@ export function ToastExample() {
       <Button variant="outline" onClick={() => toast.success("บันทึกแล้ว", { description: "การเปลี่ยนแปลงมีผลทันที" })}>
         Success
       </Button>
-      <Button variant="outline" onClick={() => toast.error("บันทึกไม่สำเร็จ", { description: "กรุณาลองใหม่อีกครั้ง" })}>
+      <Button variant="outline" onClick={() => toast.error("บันทึกไม่สำเร็จ", { description: "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ ลองใหม่อีกครั้ง" })}>
         Error
+      </Button>
+      <Button variant="outline" onClick={() => toast.warning("สต็อกใกล้หมด", { description: "กาแฟคั่วกลาง เหลือ 3 ถุง" })}>
+        Warning
+      </Button>
+      <Button variant="outline" onClick={() => toast.info("มีเวอร์ชันใหม่", { description: "รีเฟรชหน้าเพื่อใช้งานฟีเจอร์ล่าสุด" })}>
+        Info
       </Button>
       <Button
         variant="outline"
@@ -973,7 +979,12 @@ export function ToastExample() {
       </Button>
       <Button
         variant="outline"
-        onClick={() => toast("ลบรายการแล้ว", { action: { label: "เลิกทำ", onClick: () => toast("กู้คืนแล้ว") } })}
+        onClick={() =>
+          toast("ลบลูกค้า 3 รายแล้ว", {
+            description: "กู้คืนได้ภายใน 10 วินาที",
+            action: { label: "เลิกทำ", onClick: () => toast.success("กู้คืนแล้ว") },
+          })
+        }
       >
         With action
       </Button>
@@ -1038,7 +1049,7 @@ export function SkeletonExample() {
 export function SeparatorExample() {
   return (
     <div className="w-full max-w-sm text-sm">
-      <p className="font-medium">Ecsight Design System</p>
+      <p className="font-medium">Ecsight UI</p>
       <p className="text-muted-foreground">shadcn · Motion · Solar</p>
       <Separator className="my-3" />
       <div className="flex h-5 items-center gap-3">

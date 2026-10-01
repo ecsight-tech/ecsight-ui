@@ -8,6 +8,7 @@ import {
   type ChevronProps,
   type DayButtonProps,
   type DayPickerProps,
+  type DropdownProps,
   type MonthCaptionProps,
   type RootProps,
 } from "@daypicker/react"
@@ -17,6 +18,7 @@ import { AltArrowDownIcon, AltArrowLeftIcon, AltArrowRightIcon } from "@solar-ic
 import { cn } from "cn"
 
 import { Button, buttonVariants } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 type Era = "be" | "ce"
 type View = "days" | "months" | "years"
@@ -156,7 +158,11 @@ function Calendar({
               root: cn("w-fit", d.root),
               months: cn("relative flex flex-col gap-4 md:flex-row", d.months),
               month: cn("flex w-full flex-col gap-4", d.month),
-              nav: cn("absolute inset-x-0 top-0 z-10 flex w-full items-center justify-between gap-1", d.nav),
+              // The nav spans the caption row; let clicks through to the caption/dropdowns, keep the arrows clickable
+              nav: cn(
+                "pointer-events-none absolute inset-x-0 top-0 z-10 flex w-full items-center justify-between gap-1 *:pointer-events-auto",
+                d.nav
+              ),
               button_previous: cn(
                 buttonVariants({ variant: buttonVariant }),
                 "size-(--cell-size) p-0 select-none aria-disabled:opacity-50",
@@ -175,11 +181,6 @@ function Calendar({
                 "flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium",
                 d.dropdowns,
               ),
-              dropdown_root: cn(
-                "relative rounded-md border border-input has-focus:border-ring has-focus:ring-3 has-focus:ring-ring/50",
-                d.dropdown_root,
-              ),
-              dropdown: cn("absolute inset-0 bg-popover opacity-0", d.dropdown),
               caption_label: cn(
                 "font-medium select-none",
                 captionLayout === "label"
@@ -215,6 +216,7 @@ function Calendar({
               Chevron: CalendarChevron,
               DayButton: CalendarDayButton,
               MonthCaption: CalendarMonthCaption,
+              Dropdown: CalendarDropdown,
               ...components,
             }}
             {...props}
@@ -421,7 +423,8 @@ function PanelCell({
       data-current={current || undefined}
       className={cn(
         "h-10 font-normal tabular-nums",
-        "data-current:font-semibold data-current:text-primary",
+        // current month/year in brand text — unless it's also selected (text on bg-primary)
+        "data-current:font-semibold data-current:not-aria-pressed:text-primary",
         "aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/85",
         className,
       )}
@@ -440,6 +443,31 @@ function CalendarChevron({ className, orientation }: ChevronProps) {
   const Icon =
     orientation === "left" ? AltArrowLeftIcon : orientation === "right" ? AltArrowRightIcon : AltArrowDownIcon
   return <Icon className={cn("size-4", className)} />
+}
+
+/**
+ * Month/year dropdowns (captionLayout="dropdown") as the system Select — never the browser's
+ * native <select>. DayPicker expects a select change event, so hand it the value in that shape.
+ */
+function CalendarDropdown({ options, value, onChange, disabled, "aria-label": ariaLabel }: DropdownProps) {
+  return (
+    <Select
+      value={String(value)}
+      disabled={disabled}
+      onValueChange={(v) => onChange?.({ target: { value: v } } as React.ChangeEvent<HTMLSelectElement>)}
+    >
+      <SelectTrigger size="sm" aria-label={ariaLabel} className="relative z-20 gap-1 px-2.5 font-medium tabular-nums">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent className="max-h-72">
+        {options?.map((o) => (
+          <SelectItem key={o.value} value={String(o.value)} disabled={o.disabled} className="tabular-nums">
+            {o.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
 }
 
 /** Caption as a button that opens the month/year panel (label layout only; dropdowns render as usual) */

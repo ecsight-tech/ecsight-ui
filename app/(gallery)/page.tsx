@@ -10,6 +10,9 @@ import * as BoldDuotone from "@solar-icons/react/bold-duotone"
 import { components } from "@/lib/catalog"
 import { installCommand, registryNamespace, siteUrl } from "@/lib/site"
 import { CodeBlock } from "@/components/gallery/code-block"
+import { AgentSetup } from "@/components/gallery/agent-setup"
+import { InstallWalkthrough } from "@/components/gallery/install-walkthrough"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { MotionPlayground } from "@/components/gallery/motion-playground"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -42,10 +45,10 @@ export default function OverviewPage() {
     <div className="grid gap-16">
       <section className="grid gap-5">
         <Badge variant="outline" className="w-fit">
-          v0.2 · shadcn/ui + Motion + Solar
+          v0.5 · shadcn/ui + Motion + Solar
         </Badge>
         <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-          Ecsight Design System
+          Ecsight UI
         </h1>
         <p className="max-w-2xl text-lg text-pretty text-muted-foreground">
           ชุดคอมโพเนนต์สำหรับสร้างเว็บแอปของทีม Ecsight — พื้นฐานจาก shadcn/ui เคลื่อนไหวด้วย spring ที่กระชับ
@@ -67,26 +70,42 @@ export default function OverviewPage() {
         </div>
       </section>
 
-      <Section id="install" title="เริ่มต้นใช้งาน" description="เพิ่ม registry ของ Ecsight ใน components.json แล้วติดตั้งผ่าน shadcn CLI">
-        <div className="grid gap-4 lg:grid-cols-2">
-          <CodeBlock
-            title="components.json"
-            lang="json"
-            code={JSON.stringify({ registries: { [registryNamespace]: `${siteUrl}/r/{name}.json` } }, null, 2)}
-          />
-          <CodeBlock
-            title="terminal"
-            lang="bash"
-            code={[
-              "# 1. tokens, fonts, motion, providers (ครั้งแรกครั้งเดียว)",
-              installCommand("foundation"),
-              "",
-              "# 2. คอมโพเนนต์หรือ block ที่ต้องการ",
-              installCommand("button"),
-              installCommand("app-shell"),
-            ].join("\n")}
-          />
-        </div>
+      <Section
+        id="install"
+        title="เริ่มต้นใช้งาน"
+        description="วาง setup prompt แล้วบอกสิ่งที่อยากได้ — agent อ่านกติกา ติดตั้ง และสร้างหน้าให้ตามมาตรฐานของ Ecsight"
+      >
+        <InstallWalkthrough />
+      </Section>
+
+      <Section id="setup-prompt" title="Setup prompt" description="คัดลอกไปใช้กับ agent ของคุณได้เลย">
+        <AgentSetup />
+        <Accordion type="single" collapsible className="rounded-xl border px-4">
+          <AccordionItem value="manual" className="border-b-0">
+            <AccordionTrigger>ติดตั้งเองด้วย shadcn CLI (ไม่ใช้ agent)</AccordionTrigger>
+            <AccordionContent>
+              <div className="grid gap-4 pb-2 lg:grid-cols-2">
+                <CodeBlock
+                  title="components.json"
+                  lang="json"
+                  code={JSON.stringify({ registries: { [registryNamespace]: `${siteUrl}/r/{name}.json` } }, null, 2)}
+                />
+                <CodeBlock
+                  title="terminal"
+                  lang="bash"
+                  code={[
+                    "# 1. tokens, fonts, motion, providers (ครั้งแรกครั้งเดียว)",
+                    installCommand("foundation"),
+                    "",
+                    "# 2. คอมโพเนนต์หรือ block ที่ต้องการ",
+                    installCommand("button"),
+                    installCommand("app-shell"),
+                  ].join("\n")}
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </Section>
 
       <Section id="color" title="สี" description="Token เชิงความหมาย (semantic) ทั้งหมดอิงจาก --brand-h ตัวเดียว เปลี่ยนสีแบรนด์ได้ในที่เดียว">

@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "ecsight",
-  "homepage": "https://ecsight-design-system.vercel.app",
+  "homepage": "https://ui.1ecsight.com",
   "items": [
     {
       "name": "foundation",
@@ -473,7 +473,8 @@
       ],
       "registryDependencies": [
         "@ecsight/button",
-        "@ecsight/foundation"
+        "@ecsight/foundation",
+        "@ecsight/select"
       ],
       "files": [
         {
@@ -907,10 +908,12 @@
       "description": "Async feedback after an action. Motion: Sonner stack animation; Solar status icons.",
       "dependencies": [
         "@solar-icons/react",
+        "cn",
         "next-themes",
         "sonner"
       ],
       "registryDependencies": [
+        "@ecsight/button",
         "@ecsight/foundation",
         "@ecsight/spinner"
       ],
@@ -1199,7 +1202,8 @@
       ],
       "registryDependencies": [
         "@ecsight/foundation",
-        "@ecsight/status-badge"
+        "@ecsight/status-badge",
+        "@ecsight/tooltip"
       ],
       "files": [
         {

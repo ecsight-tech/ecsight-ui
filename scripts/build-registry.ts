@@ -184,7 +184,7 @@ const foundation = {
 const registry = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
   name: "ecsight",
-  homepage: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ecsight-design-system.vercel.app",
+  homepage: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.1ecsight.com",
   items: [
     foundation,
     ...fonts.map(({ name, ...font }) => ({

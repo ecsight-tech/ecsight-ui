@@ -12,7 +12,7 @@ export default function GalleryLayout({ children }: LayoutProps<"/">) {
         <main className="min-w-0 py-8 md:py-10">{children}</main>
       </div>
       <footer className="border-t py-6 text-center text-xs text-muted-foreground">
-        Ecsight Design System · built on shadcn/ui · icons by{" "}
+        Ecsight UI · built on shadcn/ui · icons by{" "}
         <a href="https://www.figma.com/community/file/1166831539721848736" className="underline underline-offset-4">
           480 Design (Solar, CC BY 4.0)
         </a>
