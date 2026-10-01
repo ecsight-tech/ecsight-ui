@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "title": "Empty State",
+  "description": "Nothing to show — explain why and offer a next step. Motion: Icon, title, text, action stagger in.",
+  "dependencies": [
+    "cn",
+    "motion"
+  ],
+  "registryDependencies": [
+    "@ecsight/foundation",
+    "@ecsight/icon"
+  ],
+  "files": [
+    {
+      "path": "components/ui/empty-state.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { motion } from \"motion/react\"\nimport { cn } from \"cn\"\n\nimport { fadeUp, listStagger } from \"@/lib/motion\"\nimport type { SolarIcon } from \"@/components/ui/icon\"\n\ntype EmptyStateProps = Omit<React.ComponentProps<typeof motion.div>, \"title\"> & {\n  /** Use a `bold-duotone` Solar icon — empty states are the one place for duotone */\n  icon?: SolarIcon\n  title: React.ReactNode\n  description?: React.ReactNode\n  /** Primary next step, usually a <Button> */\n  action?: React.ReactNode\n}\n\n/** Shown when a list, table or search has nothing to display. Always offer a next step. */\nfunction EmptyState({ icon: IconCmp, title, description, action, className, ...props }: EmptyStateProps) {\n  return (\n    <motion.div\n      data-slot=\"empty-state\"\n      variants={listStagger}\n      initial=\"hidden\"\n      animate=\"visible\"\n      className={cn(\"flex flex-col items-center justify-center gap-3 px-6 py-12 text-center\", className)}\n      {...props}\n    >\n      {IconCmp && (\n        <motion.div\n          variants={fadeUp}\n          className=\"mb-1 grid size-12 place-items-center rounded-xl bg-accent text-accent-foreground\"\n        >\n          <IconCmp className=\"size-6\" aria-hidden />\n        </motion.div>\n      )}\n      <motion.h3 variants={fadeUp} className=\"text-base font-semibold text-foreground\">\n        {title}\n      </motion.h3>\n      {description && (\n        <motion.p variants={fadeUp} className=\"max-w-sm text-sm text-muted-foreground\">\n          {description}\n        </motion.p>\n      )}\n      {action && (\n        <motion.div variants={fadeUp} className=\"mt-2\">\n          {action}\n        </motion.div>\n      )}\n    </motion.div>\n  )\n}\n\nexport { EmptyState }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

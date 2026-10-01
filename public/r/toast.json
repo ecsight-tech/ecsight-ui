@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast",
+  "title": "Toast (Sonner)",
+  "description": "Async feedback after an action. Motion: Sonner stack animation; Solar status icons.",
+  "dependencies": [
+    "@solar-icons/react",
+    "next-themes",
+    "sonner"
+  ],
+  "registryDependencies": [
+    "@ecsight/foundation",
+    "@ecsight/spinner"
+  ],
+  "files": [
+    {
+      "path": "components/ui/sonner.tsx",
+      "content": "\"use client\"\n\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\nimport { CheckCircleIcon, InfoCircleIcon, DangerTriangleIcon, CloseCircleIcon } from \"@solar-icons/react/linear\"\n\nimport { Spinner } from \"@/components/ui/spinner\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: (\n          <CheckCircleIcon className=\"size-4\" />\n        ),\n        info: (\n          <InfoCircleIcon className=\"size-4\" />\n        ),\n        warning: (\n          <DangerTriangleIcon className=\"size-4\" />\n        ),\n        error: (\n          <CloseCircleIcon className=\"size-4\" />\n        ),\n        loading: (\n          <Spinner className=\"size-4\" />\n        ),\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      toastOptions={{\n        classNames: {\n          toast: \"cn-toast\",\n        },\n      }}\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

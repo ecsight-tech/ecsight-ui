@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kpi-cards",
+  "title": "KPI Cards",
+  "description": "Row of metric cards with trend. Motion: Cards stagger in; numbers count up.",
+  "dependencies": [
+    "@solar-icons/react",
+    "cn",
+    "motion"
+  ],
+  "registryDependencies": [
+    "@ecsight/animated-number",
+    "@ecsight/card",
+    "@ecsight/foundation"
+  ],
+  "files": [
+    {
+      "path": "components/blocks/kpi-cards.tsx",
+      "content": "\"use client\"\n\nimport { motion } from \"motion/react\"\nimport { ArrowRightDownIcon, ArrowRightUpIcon } from \"@solar-icons/react/linear\"\nimport { cn } from \"cn\"\n\nimport { fadeUp, listStagger } from \"@/lib/motion\"\nimport { AnimatedNumber } from \"@/components/ui/animated-number\"\nimport { Card, CardContent, CardDescription, CardHeader, CardTitle } from \"@/components/ui/card\"\n\nexport type Kpi = {\n  key: string\n  label: string\n  value: number\n  /** Percent change vs previous period */\n  delta: number\n  format?: Intl.NumberFormatOptions\n}\n\n/** Block: a row of KPI cards. Numbers count up on a spring; cards stagger in. */\nexport function KpiCards({ items, className }: { items: readonly Kpi[]; className?: string }) {\n  return (\n    <motion.div\n      variants={listStagger}\n      initial=\"hidden\"\n      animate=\"visible\"\n      className={cn(\"grid gap-4 sm:grid-cols-2 xl:grid-cols-4\", className)}\n    >\n      {items.map((kpi) => {\n        const up = kpi.delta >= 0\n        return (\n          <motion.div key={kpi.key} variants={fadeUp}>\n            <Card className=\"gap-2\">\n              <CardHeader>\n                <CardDescription>{kpi.label}</CardDescription>\n                <CardTitle className=\"text-2xl font-semibold\">\n                  <AnimatedNumber value={kpi.value} format={kpi.format} />\n                </CardTitle>\n              </CardHeader>\n              <CardContent>\n                <span\n                  className={cn(\n                    \"inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium tabular-nums\",\n                    up ? \"bg-success/10 text-success\" : \"bg-destructive/10 text-destructive\"\n                  )}\n                >\n                  {up ? <ArrowRightUpIcon className=\"size-3.5\" /> : <ArrowRightDownIcon className=\"size-3.5\" />}\n                  {up ? \"+\" : \"\"}\n                  {kpi.delta.toFixed(1)}%\n                </span>\n                <span className=\"ml-2 text-xs text-muted-foreground\">เทียบเดือนก่อน</span>\n              </CardContent>\n            </Card>\n          </motion.div>\n        )\n      })}\n    </motion.div>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:block"
+}

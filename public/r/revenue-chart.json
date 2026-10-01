@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "revenue-chart",
+  "title": "Revenue Chart",
+  "description": "Stacked area chart with range switcher.",
+  "dependencies": [
+    "recharts"
+  ],
+  "registryDependencies": [
+    "@ecsight/card",
+    "@ecsight/chart",
+    "@ecsight/foundation",
+    "@ecsight/toggle-group"
+  ],
+  "files": [
+    {
+      "path": "components/blocks/revenue-chart.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Area, AreaChart, CartesianGrid, XAxis } from \"recharts\"\n\nimport { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from \"@/components/ui/card\"\nimport {\n  ChartContainer,\n  ChartLegend,\n  ChartLegendContent,\n  ChartTooltip,\n  ChartTooltipContent,\n  type ChartConfig,\n} from \"@/components/ui/chart\"\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\"\n\nconst config = {\n  web: { label: \"เว็บไซต์\", color: \"var(--chart-1)\" },\n  marketplace: { label: \"มาร์เก็ตเพลส\", color: \"var(--chart-2)\" },\n} satisfies ChartConfig\n\ntype Point = { date: string; web: number; marketplace: number }\n\n/**\n * Block: stacked area chart. By default it has its own 7/14/30-day switcher;\n * pass `rangeSwitcher={false}` when a page-level DateRangePicker already\n * filters `data`. Recharts animates on range change.\n */\nexport function RevenueChart({\n  data,\n  rangeSwitcher = true,\n  description = \"ยอดขายรายวัน (บาท)\",\n}: {\n  data: Point[]\n  rangeSwitcher?: boolean\n  description?: React.ReactNode\n}) {\n  const [range, setRange] = React.useState(\"30\")\n  const visible = rangeSwitcher ? data.slice(-Number(range)) : data\n\n  return (\n    <Card>\n      <CardHeader>\n        <CardTitle>รายได้ตามช่องทาง</CardTitle>\n        <CardDescription>{description}</CardDescription>\n        {rangeSwitcher && (\n          <CardAction>\n            <ToggleGroup\n              type=\"single\"\n              variant=\"outline\"\n              size=\"sm\"\n              value={range}\n              onValueChange={(v) => v && setRange(v)}\n            >\n              <ToggleGroupItem value=\"7\">7 วัน</ToggleGroupItem>\n              <ToggleGroupItem value=\"14\">14 วัน</ToggleGroupItem>\n              <ToggleGroupItem value=\"30\">30 วัน</ToggleGroupItem>\n            </ToggleGroup>\n          </CardAction>\n        )}\n      </CardHeader>\n      <CardContent>\n        <ChartContainer config={config} className=\"aspect-auto h-64 w-full\">\n          <AreaChart data={visible} margin={{ left: 4, right: 4 }}>\n            <defs>\n              {([\"web\", \"marketplace\"] as const).map((k) => (\n                <linearGradient key={k} id={`fill-${k}`} x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n                  <stop offset=\"5%\" stopColor={`var(--color-${k})`} stopOpacity={0.35} />\n                  <stop offset=\"95%\" stopColor={`var(--color-${k})`} stopOpacity={0.02} />\n                </linearGradient>\n              ))}\n            </defs>\n            <CartesianGrid vertical={false} />\n            <XAxis\n              dataKey=\"date\"\n              tickLine={false}\n              axisLine={false}\n              tickMargin={8}\n              minTickGap={24}\n              tickFormatter={(v: string) =>\n                new Date(v).toLocaleDateString(\"th-TH\", { day: \"numeric\", month: \"short\" })\n              }\n            />\n            <ChartTooltip\n              cursor={false}\n              content={\n                <ChartTooltipContent\n                  indicator=\"dot\"\n                  labelFormatter={(v) =>\n                    new Date(String(v)).toLocaleDateString(\"th-TH\", { day: \"numeric\", month: \"long\" })\n                  }\n                />\n              }\n            />\n            <Area\n              dataKey=\"marketplace\"\n              type=\"natural\"\n              stackId=\"a\"\n              fill=\"url(#fill-marketplace)\"\n              stroke=\"var(--color-marketplace)\"\n              strokeWidth={2}\n              animationDuration={600}\n              animationEasing=\"ease-out\"\n            />\n            <Area\n              dataKey=\"web\"\n              type=\"natural\"\n              stackId=\"a\"\n              fill=\"url(#fill-web)\"\n              stroke=\"var(--color-web)\"\n              strokeWidth={2}\n              animationDuration={600}\n              animationEasing=\"ease-out\"\n            />\n            <ChartLegend content={<ChartLegendContent />} />\n          </AreaChart>\n        </ChartContainer>\n      </CardContent>\n    </Card>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:block"
+}

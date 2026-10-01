@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "logo",
+  "title": "Logo",
+  "description": "Ecsight mark (#0056FF) and mark + wordmark lockup.",
+  "dependencies": [
+    "cn"
+  ],
+  "registryDependencies": [
+    "@ecsight/foundation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/logo.tsx",
+      "content": "import { cn } from \"cn\"\n\n/**\n * Ecsight mark. Fills with `currentColor` and defaults to the exact brand\n * blue (`text-brand`, #0056FF) — override with e.g. `text-primary-foreground`\n * on a coloured surface. Decorative by default; pass `title` when it stands\n * alone as the only label.\n */\nexport function LogoMark({ className, title, ...props }: React.ComponentProps<\"svg\"> & { title?: string }) {\n  return (\n    <svg\n      viewBox=\"0 0 26 28\"\n      fill=\"currentColor\"\n      role={title ? \"img\" : undefined}\n      aria-hidden={title ? undefined : true}\n      className={cn(\"size-6 shrink-0 text-brand\", className)}\n      {...props}\n    >\n      {title && <title>{title}</title>}\n      <path d=\"M22.0592 14.2923C22.5109 14.2923 22.9627 14.7437 22.9627 15.195C22.9627 17.6021 21.0052 19.5579 18.596 19.5579H17.1655C16.7138 19.5579 16.2621 19.1066 16.2621 18.6552V15.195C16.2621 14.7437 16.7138 14.2923 17.1655 14.2923H22.0592Z\" />\n      <path d=\"M6.02302 14.8941V22.1907C6.02302 25.0491 3.99024 27.3058 1.27993 27.3058H1.20465C0.376469 27.3058 6.10352e-05 26.9297 6.10352e-05 26.5536V14.3675C6.10352e-05 5.49124 5.57129 0 14.3799 0H24.7695C25.2213 0 25.5224 0.376132 25.5224 0.752217V0.90268C25.5224 3.15933 23.4144 5.26557 20.5534 5.26557H15.0575C8.80866 5.26557 6.02302 8.19928 6.02302 14.8941Z\" />\n      <path d=\"M25.8235 22.2659V22.8677C25.8235 25.1244 23.9413 26.9297 21.6074 26.9297H8.73331C8.35686 26.9297 8.13099 26.6288 8.13099 26.3279V14.8941C8.13099 9.40285 10.0884 7.14615 14.8315 7.14615H24.6942C25.0706 7.14615 25.3718 7.44703 25.3718 7.74795V8.34971C25.3718 10.6064 23.4896 12.4117 21.1557 12.4117H14.5304C14.3045 12.4117 14.154 12.5622 14.154 12.7879V21.288C14.154 21.5137 14.3045 21.6641 14.5304 21.6641H25.1459C25.5224 21.6641 25.8235 21.965 25.8235 22.2659Z\" />\n    </svg>\n  )\n}\n\n/** Mark + \"Ecsight\" wordmark. The wordmark inherits the surrounding text colour. */\nexport function Logo({ className, markClassName, ...props }: React.ComponentProps<\"span\"> & { markClassName?: string }) {\n  return (\n    <span className={cn(\"inline-flex items-center gap-2 font-semibold tracking-tight\", className)} {...props}>\n      <LogoMark className={markClassName} />\n      <span>Ecsight</span>\n    </span>\n  )\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
