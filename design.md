@@ -312,7 +312,7 @@ Solar icons by **480 Design**, licensed **CC BY 4.0**. Every app **MUST** credit
 
 ## 5. Components
 
-Install: `npx shadcn@latest add @ecsight/<name>`. Live examples and source: `/components/<name>`.
+Install: `npx shadcn@latest add @ecsight/<name>`. Live examples and source: `/docs/components/<name>`.
 
 ### 5.1 Actions
 
@@ -496,7 +496,7 @@ AppShell
 ## 8. For agents: building a screen
 
 1. Start from `@ecsight/app-shell`. Put page content in its children.
-2. Compose from registry items and blocks; check `/blocks` before building anything table-, form- or KPI-shaped.
+2. Compose from registry items and blocks; check `/docs/blocks` before building anything table-, form- or KPI-shaped.
 3. Use only tokens from §3; if you need a new token, stop and ask.
 4. Add motion only from §3.5 presets; if unsure, add none — the components already animate.
 5. Write Thai copy per §6.7.

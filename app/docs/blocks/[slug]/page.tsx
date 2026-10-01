@@ -12,12 +12,12 @@ export function generateStaticParams() {
   return blocks.map((b) => ({ slug: b.slug }))
 }
 
-export async function generateMetadata({ params }: PageProps<"/blocks/[slug]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/docs/blocks/[slug]">): Promise<Metadata> {
   const { slug } = await params
   return { title: blocks.find((b) => b.slug === slug)?.title }
 }
 
-export default async function BlockPage({ params }: PageProps<"/blocks/[slug]">) {
+export default async function BlockPage({ params }: PageProps<"/docs/blocks/[slug]">) {
   const { slug } = await params
   const item = blocks.find((b) => b.slug === slug)
   if (!item) notFound()

@@ -62,7 +62,7 @@ export default function OverviewPage() {
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link href="/components/button">
+            <Link href="/docs/components/button">
               Components
               <ArrowRightIcon />
             </Link>
@@ -170,7 +170,7 @@ export default function OverviewPage() {
       <Section id="components" title="Components" description={`${components.length} คอมโพเนนต์ พร้อม motion — ติดตั้งทีละตัวผ่าน registry`}>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {components.map((c) => (
-            <Link key={c.slug} href={`/components/${c.slug}`} className="group">
+            <Link key={c.slug} href={`/docs/components/${c.slug}`} className="group">
               <Card className="h-full gap-1 py-4 transition-colors group-hover:border-primary/40 group-hover:bg-accent/40">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-sm">

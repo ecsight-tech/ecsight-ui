@@ -10,9 +10,9 @@ import { ThemeToggle } from "@/components/blocks/app-shell"
 import { LogoMark } from "@/components/ui/logo"
 
 const links = [
-  { href: "/", label: "Overview" },
-  { href: "/components/button", label: "Components", match: "/components" },
-  { href: "/blocks/app-shell", label: "Blocks", match: "/blocks" },
+  { href: "/docs", label: "Overview" },
+  { href: "/docs/components/button", label: "Components", match: "/docs/components" },
+  { href: "/docs/blocks/app-shell", label: "Blocks", match: "/docs/blocks" },
   { href: "/demo", label: "Demo" },
 ]
 

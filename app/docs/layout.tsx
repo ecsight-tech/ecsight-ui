@@ -1,7 +1,7 @@
 import { DocsNav } from "@/components/gallery/docs-nav"
 import { SiteHeader } from "@/components/gallery/site-header"
 
-export default function GalleryLayout({ children }: LayoutProps<"/">) {
+export default function DocsLayout({ children }: LayoutProps<"/docs">) {
   return (
     <div className="flex min-h-svh flex-col">
       <SiteHeader />

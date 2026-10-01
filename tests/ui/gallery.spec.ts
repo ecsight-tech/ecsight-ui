@@ -8,9 +8,10 @@ const FIXED_NOW = new Date("2026-10-01T10:00:00+07:00")
 
 const pages = [
   { name: "home", path: "/" },
+  { name: "docs", path: "/docs" },
   { name: "demo", path: "/demo" },
-  ...components.map((c) => ({ name: `components-${c.slug}`, path: `/components/${c.slug}` })),
-  ...blocks.map((b) => ({ name: `blocks-${b.slug}`, path: `/blocks/${b.slug}` })),
+  ...components.map((c) => ({ name: `components-${c.slug}`, path: `/docs/components/${c.slug}` })),
+  ...blocks.map((b) => ({ name: `blocks-${b.slug}`, path: `/docs/blocks/${b.slug}` })),
 ]
 
 for (const theme of ["light", "dark"] as const) {
