@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "count-badge",
+  "title": "Count Badge",
+  "description": "Unread / cart counts on icons. Motion: Pops in/out on a bouncy spring; digits roll in the direction of change.",
+  "dependencies": [
+    "cn",
+    "motion"
+  ],
+  "registryDependencies": [
+    "@ecsight/foundation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/count-badge.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { AnimatePresence, motion } from \"motion/react\"\nimport { cn } from \"cn\"\n\nimport { duration, ease, spring } from \"@/lib/motion\"\n\ntype CountBadgeProps = {\n  count: number\n  /** Shows `${max}+` above this */\n  max?: number\n  className?: string\n  /** Accessible description, e.g. \"การแจ้งเตือนที่ยังไม่อ่าน\" */\n  label?: string\n}\n\n/**\n * Small count bubble for notifications, inbox, cart. Pops in/out on a bouncy\n * spring; digits roll up when the count grows and down when it shrinks.\n * Hidden entirely at 0.\n */\nfunction CountBadge({ count, max = 99, className, label }: CountBadgeProps) {\n  const [prev, setPrev] = React.useState(count)\n  const [direction, setDirection] = React.useState(1)\n  if (count !== prev) {\n    // Derive roll direction during render (React's \"adjust state on prop change\" pattern)\n    setDirection(count > prev ? 1 : -1)\n    setPrev(count)\n  }\n\n  const text = count > max ? `${max}+` : String(count)\n\n  return (\n    <AnimatePresence initial={false}>\n      {count > 0 && (\n        <motion.span\n          key=\"count-badge\"\n          data-slot=\"count-badge\"\n          aria-label={label ? `${label} ${text}` : undefined}\n          initial={{ scale: 0.4, opacity: 0 }}\n          animate={{ scale: 1, opacity: 1, transition: spring.bouncy }}\n          exit={{ scale: 0.4, opacity: 0, transition: { duration: duration.fast, ease: ease.in } }}\n          className={cn(\n            \"inline-grid h-4 min-w-4 overflow-hidden rounded-full bg-primary px-1 text-[0.625rem] leading-4 font-medium text-primary-foreground tabular-nums\",\n            className\n          )}\n        >\n          <AnimatePresence initial={false} mode=\"popLayout\" custom={direction}>\n            <motion.span\n              key={text}\n              custom={direction}\n              variants={{\n                enter: (d: number) => ({ y: d * 10, opacity: 0 }),\n                center: { y: 0, opacity: 1 },\n                exit: (d: number) => ({ y: d * -10, opacity: 0 }),\n              }}\n              initial=\"enter\"\n              animate=\"center\"\n              exit=\"exit\"\n              transition={spring.snappy}\n              className=\"col-start-1 row-start-1 text-center\"\n              aria-hidden={label ? true : undefined}\n            >\n              {text}\n            </motion.span>\n          </AnimatePresence>\n        </motion.span>\n      )}\n    </AnimatePresence>\n  )\n}\n\nexport { CountBadge }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

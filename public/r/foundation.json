@@ -1,0 +1,276 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "foundation",
+  "title": "Ecsight Foundation",
+  "description": "Brand tokens (OKLCH, light/dark), motion tokens + presets, IBM Plex Sans/Thai fonts, Solar icons, providers. Install first.",
+  "dependencies": [
+    "motion",
+    "@solar-icons/react",
+    "next-themes",
+    "sonner",
+    "cn",
+    "nuqs"
+  ],
+  "registryDependencies": [
+    "@ecsight/font-plex-sans",
+    "@ecsight/font-plex-thai",
+    "@ecsight/font-plex-mono",
+    "@ecsight/toast",
+    "@ecsight/tooltip"
+  ],
+  "files": [
+    {
+      "path": "lib/motion.ts",
+      "content": "import type { Transition, Variants } from \"motion/react\"\n\n/**\n * Ecsight motion tokens. Mirrors the CSS tokens in app/globals.css\n * (--motion-*, --ease-*). Personality: snappy spring, slight overshoot,\n * 120–320ms. Never animate for decoration alone — motion must explain a\n * state change, a spatial relationship, or confirm an action.\n */\nexport const duration = {\n  fast: 0.12,\n  base: 0.18,\n  slow: 0.26,\n} as const\n\nexport const ease = {\n  out: [0.22, 1, 0.36, 1],\n  in: [0.4, 0, 1, 1],\n} as const\n\nexport const spring = {\n  /** Default for anything interactive: press, toggle, pop-in, layout shifts */\n  snappy: { type: \"spring\", stiffness: 500, damping: 32, mass: 1 },\n  /** Larger surfaces and layout changes that move far */\n  gentle: { type: \"spring\", stiffness: 300, damping: 30, mass: 1 },\n  /** Icon swaps, checkmarks, tiny badges — a touch more bounce */\n  bouncy: { type: \"spring\", stiffness: 600, damping: 22, mass: 0.8 },\n} as const satisfies Record<string, Transition>\n\n/* ─── Presets ─────────────────────────────────────────────────────────── */\n\n/** Spread onto a motion element for tactile press feedback */\nexport const pressable = {\n  whileTap: { scale: 0.97 },\n  transition: spring.snappy,\n} as const\n\n/** Popovers, menus, tooltips rendered with Motion (Radix overlays use CSS) */\nexport const popIn: Variants = {\n  hidden: { opacity: 0, scale: 0.96, y: -4 },\n  visible: { opacity: 1, scale: 1, y: 0, transition: spring.snappy },\n  exit: { opacity: 0, scale: 0.98, transition: { duration: duration.fast, ease: ease.in } },\n}\n\n/** Fade + rise for content appearing in place (cards, sections, rows) */\nexport const fadeUp: Variants = {\n  hidden: { opacity: 0, y: 8 },\n  visible: { opacity: 1, y: 0, transition: spring.gentle },\n  exit: { opacity: 0, y: -4, transition: { duration: duration.fast, ease: ease.in } },\n}\n\n/** Parent of a staggered list — pair children with `fadeUp` */\nexport const listStagger: Variants = {\n  hidden: {},\n  visible: { transition: { staggerChildren: 0.03, delayChildren: 0.02 } },\n}\n\n/** Linear → Bold icon swap (see components/ui/icon.tsx) */\nexport const iconSwap: Variants = {\n  hidden: { opacity: 0, scale: 0.6, rotate: -12 },\n  visible: { opacity: 1, scale: 1, rotate: 0, transition: spring.bouncy },\n  exit: { opacity: 0, scale: 0.6, transition: { duration: duration.fast, ease: ease.in } },\n}\n",
+      "type": "registry:lib"
+    },
+    {
+      "path": "components/providers.tsx",
+      "content": "\"use client\"\n\nimport { MotionConfig } from \"motion/react\"\nimport { ThemeProvider } from \"next-themes\"\nimport { NuqsAdapter } from \"nuqs/adapters/next/app\"\n\nimport { Toaster } from \"@/components/ui/sonner\"\nimport { TooltipProvider } from \"@/components/ui/tooltip\"\n\n/**\n * App-wide providers. `reducedMotion=\"user\"` makes every Motion animation\n * honour the OS setting; NuqsAdapter lets tables and filters keep state in the URL.\n */\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider attribute=\"class\" defaultTheme=\"system\" enableSystem disableTransitionOnChange>\n      <NuqsAdapter>\n        <MotionConfig reducedMotion=\"user\">\n          <TooltipProvider delayDuration={300}>\n            {children}\n            <Toaster position=\"bottom-right\" />\n          </TooltipProvider>\n        </MotionConfig>\n      </NuqsAdapter>\n    </ThemeProvider>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "font-sans": "var(--font-plex-sans), var(--font-plex-thai), ui-sans-serif, system-ui, sans-serif",
+      "font-mono": "var(--font-plex-mono), ui-monospace, monospace",
+      "color-brand": "var(--brand)",
+      "color-success": "var(--success)",
+      "color-warning": "var(--warning)",
+      "color-warning-foreground": "var(--warning-foreground)",
+      "ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
+      "ease-in": "cubic-bezier(0.4, 0, 1, 1)",
+      "ease-spring": "linear(0, 0.041, 0.142, 0.273, 0.412, 0.547, 0.669, 0.772, 0.856, 0.921, 0.969, 1.002, 1.023, 1.035, 1.04, 1.04, 1.037, 1.032, 1.026, 1.021, 1.016, 1.011, 1.007, 1.004, 1)",
+      "text-xs--line-height": "1.5",
+      "text-sm--line-height": "1.6",
+      "text-base--line-height": "1.65",
+      "text-lg--line-height": "1.6",
+      "text-xl--line-height": "1.5",
+      "text-2xl--line-height": "1.45",
+      "text-3xl--line-height": "1.35"
+    },
+    "light": {
+      "brand-h": "262.6",
+      "brand-c": "0.259",
+      "brand": "oklch(0.535 var(--brand-c) var(--brand-h))",
+      "motion-fast": "120ms",
+      "motion-base": "180ms",
+      "motion-slow": "260ms",
+      "motion-spring": "320ms",
+      "radius": "0.625rem",
+      "control-h": "2.25rem",
+      "table-head-h": "2.5rem",
+      "table-cell-py": "0.5rem",
+      "background": "oklch(1 0 0)",
+      "foreground": "oklch(0.16 0.01 var(--brand-h))",
+      "card": "oklch(1 0 0)",
+      "card-foreground": "var(--foreground)",
+      "popover": "oklch(1 0 0)",
+      "popover-foreground": "var(--foreground)",
+      "primary": "var(--brand)",
+      "primary-foreground": "oklch(0.99 0 0)",
+      "secondary": "oklch(0.965 0.006 var(--brand-h))",
+      "secondary-foreground": "oklch(0.22 0.01 var(--brand-h))",
+      "muted": "oklch(0.965 0.004 var(--brand-h))",
+      "muted-foreground": "oklch(0.5 0.012 var(--brand-h))",
+      "accent": "oklch(0.955 0.025 var(--brand-h))",
+      "accent-foreground": "oklch(0.38 0.14 var(--brand-h))",
+      "destructive": "oklch(0.54 0.22 27.325)",
+      "success": "oklch(0.51 0.13 155)",
+      "warning": "oklch(0.72 0.16 70)",
+      "warning-foreground": "oklch(0.25 0.06 70)",
+      "border": "oklch(0.92 0.006 var(--brand-h))",
+      "input": "oklch(0.9 0.008 var(--brand-h))",
+      "ring": "oklch(0.535 var(--brand-c) var(--brand-h) / 60%)",
+      "chart-1": "var(--brand)",
+      "chart-2": "oklch(0.44 0.16 50)",
+      "chart-3": "oklch(0.64 0.08 190)",
+      "chart-4": "oklch(0.4 0.15 350)",
+      "chart-5": "oklch(0.52 0.03 var(--brand-h))",
+      "sidebar": "oklch(0.985 0.003 var(--brand-h))",
+      "sidebar-foreground": "var(--foreground)",
+      "sidebar-primary": "var(--primary)",
+      "sidebar-primary-foreground": "var(--primary-foreground)",
+      "sidebar-accent": "oklch(0.95 0.012 var(--brand-h))",
+      "sidebar-accent-foreground": "oklch(0.2 0.02 var(--brand-h))",
+      "sidebar-border": "var(--border)",
+      "sidebar-ring": "var(--ring)"
+    },
+    "dark": {
+      "background": "oklch(0.15 0.008 var(--brand-h))",
+      "foreground": "oklch(0.97 0.003 var(--brand-h))",
+      "card": "oklch(0.19 0.01 var(--brand-h))",
+      "card-foreground": "var(--foreground)",
+      "popover": "oklch(0.21 0.012 var(--brand-h))",
+      "popover-foreground": "var(--foreground)",
+      "primary": "oklch(0.66 0.18 var(--brand-h))",
+      "primary-foreground": "oklch(0.15 0.02 var(--brand-h))",
+      "secondary": "oklch(0.26 0.012 var(--brand-h))",
+      "secondary-foreground": "var(--foreground)",
+      "muted": "oklch(0.25 0.01 var(--brand-h))",
+      "muted-foreground": "oklch(0.7 0.012 var(--brand-h))",
+      "accent": "oklch(0.28 0.05 var(--brand-h))",
+      "accent-foreground": "oklch(0.88 0.08 var(--brand-h))",
+      "destructive": "oklch(0.704 0.191 22.216)",
+      "success": "oklch(0.72 0.15 155)",
+      "warning": "oklch(0.8 0.15 75)",
+      "warning-foreground": "oklch(0.25 0.06 70)",
+      "border": "oklch(1 0 0 / 10%)",
+      "input": "oklch(1 0 0 / 15%)",
+      "ring": "oklch(0.66 0.18 var(--brand-h) / 60%)",
+      "chart-1": "oklch(0.66 0.18 var(--brand-h))",
+      "chart-2": "oklch(0.56 0.16 50)",
+      "chart-3": "oklch(0.84 0.08 190)",
+      "chart-4": "oklch(0.52 0.15 350)",
+      "chart-5": "oklch(0.68 0.03 var(--brand-h))",
+      "sidebar": "oklch(0.17 0.009 var(--brand-h))",
+      "sidebar-foreground": "var(--foreground)",
+      "sidebar-primary": "var(--primary)",
+      "sidebar-primary-foreground": "var(--primary-foreground)",
+      "sidebar-accent": "oklch(0.25 0.02 var(--brand-h))",
+      "sidebar-accent-foreground": "var(--foreground)",
+      "sidebar-border": "oklch(1 0 0 / 8%)",
+      "sidebar-ring": "var(--ring)"
+    }
+  },
+  "css": {
+    "@layer base": {
+      ":lang(th)": {
+        "line-height": "1.65"
+      },
+      "[data-density=\"compact\"]": {
+        "--control-h": "2rem",
+        "--table-head-h": "2.25rem",
+        "--table-cell-py": "0.25rem"
+      },
+      "[data-slot=\"table\"], [data-numeric]": {
+        "font-variant-numeric": "tabular-nums"
+      }
+    },
+    "@layer components": {
+      "[data-slot$=\"-content\"][data-state=\"open\"], [data-slot$=\"-content\"][data-state=\"delayed-open\"], [data-slot$=\"-content\"][data-state=\"instant-open\"]": {
+        "--tw-animation-duration": "var(--motion-spring)",
+        "--tw-ease": "var(--ease-spring)"
+      },
+      "[data-slot$=\"-content\"][data-state=\"closed\"]": {
+        "--tw-animation-duration": "var(--motion-fast)",
+        "--tw-ease": "var(--ease-in)"
+      },
+      "[data-slot=\"sheet-content\"][data-state=\"open\"]": {
+        "--tw-animation-duration": "var(--motion-slow)",
+        "--tw-ease": "var(--ease-out)"
+      },
+      "[data-slot$=\"-overlay\"][data-state]": {
+        "--tw-animation-duration": "var(--motion-base)",
+        "--tw-ease": "var(--ease-out)"
+      },
+      "[data-slot=\"accordion-content\"][data-state], [data-slot=\"collapsible-content\"][data-state]": {
+        "--tw-animation-duration": "var(--motion-slow)",
+        "--tw-ease": "var(--ease-out)"
+      },
+      "[data-slot=\"field\"][data-invalid=\"true\"]": {
+        "animation": "field-shake 320ms var(--ease-out)"
+      },
+      ".calendar-weeks-before-enter": {
+        "animation": "calendar-in-left var(--motion-slow) var(--ease-out) forwards"
+      },
+      ".calendar-weeks-after-enter": {
+        "animation": "calendar-in-right var(--motion-slow) var(--ease-out) forwards"
+      },
+      ".calendar-weeks-before-exit": {
+        "animation": "calendar-out-left var(--motion-slow) var(--ease-out) forwards"
+      },
+      ".calendar-weeks-after-exit": {
+        "animation": "calendar-out-right var(--motion-slow) var(--ease-out) forwards"
+      },
+      ".calendar-caption-enter": {
+        "animation": "calendar-fade-in var(--motion-slow) var(--ease-out) forwards"
+      },
+      ".calendar-caption-exit": {
+        "animation": "calendar-fade-out var(--motion-slow) var(--ease-out) forwards"
+      }
+    },
+    "@keyframes calendar-in-left": {
+      "from": {
+        "transform": "translateX(-100%)",
+        "opacity": "0"
+      },
+      "to": {
+        "transform": "none",
+        "opacity": "1"
+      }
+    },
+    "@keyframes calendar-in-right": {
+      "from": {
+        "transform": "translateX(100%)",
+        "opacity": "0"
+      },
+      "to": {
+        "transform": "none",
+        "opacity": "1"
+      }
+    },
+    "@keyframes calendar-out-left": {
+      "from": {
+        "transform": "none",
+        "opacity": "1"
+      },
+      "to": {
+        "transform": "translateX(-100%)",
+        "opacity": "0"
+      }
+    },
+    "@keyframes calendar-out-right": {
+      "from": {
+        "transform": "none",
+        "opacity": "1"
+      },
+      "to": {
+        "transform": "translateX(100%)",
+        "opacity": "0"
+      }
+    },
+    "@keyframes calendar-fade-in": {
+      "from": {
+        "opacity": "0"
+      },
+      "to": {
+        "opacity": "1"
+      }
+    },
+    "@keyframes calendar-fade-out": {
+      "from": {
+        "opacity": "1"
+      },
+      "to": {
+        "opacity": "0"
+      }
+    },
+    "@keyframes field-shake": {
+      "0%, 100%": {
+        "transform": "translateX(0)"
+      },
+      "20%": {
+        "transform": "translateX(-4px)"
+      },
+      "40%": {
+        "transform": "translateX(4px)"
+      },
+      "60%": {
+        "transform": "translateX(-2px)"
+      },
+      "80%": {
+        "transform": "translateX(2px)"
+      }
+    },
+    "@media (prefers-reduced-motion: reduce)": {
+      "*, *::before, *::after": {
+        "animation-duration": "1ms !important",
+        "animation-iteration-count": "1 !important",
+        "transition-duration": "1ms !important",
+        "scroll-behavior": "auto !important"
+      }
+    }
+  },
+  "type": "registry:style"
+}

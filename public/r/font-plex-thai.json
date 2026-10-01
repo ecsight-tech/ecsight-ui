@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "font-plex-thai",
+  "title": "IBM Plex Sans Thai Looped",
+  "type": "registry:font",
+  "font": {
+    "family": "IBM Plex Sans Thai Looped",
+    "provider": "google",
+    "import": "IBM_Plex_Sans_Thai_Looped",
+    "variable": "--font-plex-thai",
+    "weight": [
+      "400",
+      "500",
+      "600",
+      "700"
+    ],
+    "subsets": [
+      "thai"
+    ]
+  }
+}

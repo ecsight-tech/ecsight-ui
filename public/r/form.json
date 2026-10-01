@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form",
+  "title": "Form",
+  "description": "react-hook-form + zod wired into Field; Thai validators in lib/validation. Motion: Errors slide open; a field shakes once when it turns invalid; focus jumps to the first error.",
+  "dependencies": [
+    "react-hook-form",
+    "zod"
+  ],
+  "registryDependencies": [
+    "@ecsight/field",
+    "@ecsight/foundation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/form.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport {\n  Controller,\n  type ControllerFieldState,\n  type ControllerProps,\n  type ControllerRenderProps,\n  type FieldPath,\n  type FieldValues,\n} from \"react-hook-form\"\n\nimport { Field, FieldDescription, FieldError, FieldLabel } from \"@/components/ui/field\"\n\n/** Spread onto the control so label, description and error are wired for assistive tech */\nexport type FormControlProps = {\n  id: string\n  \"aria-invalid\": boolean\n  \"aria-describedby\"?: string\n}\n\n/**\n * react-hook-form ↔ Field. Renders label, description and the animated\n * FieldError, sets `data-invalid` (red label + one shake) and hands the\n * control everything it needs:\n *\n * ```tsx\n * <FormField control={form.control} name=\"email\" label=\"อีเมล\"\n *   render={({ field, control }) => <Input type=\"email\" {...field} {...control} />} />\n * ```\n *\n * Validation timing is RHF's default: errors appear on submit, then update\n * as the user types. Focus moves to the first invalid field on submit.\n */\nfunction FormField<\n  TValues extends FieldValues,\n  TName extends FieldPath<TValues>,\n  // the schema's output type when a resolver transforms values (e.g. zod `.transform`)\n  TTransformed = TValues,\n>({\n  label,\n  description,\n  orientation,\n  className,\n  render,\n  ...controller\n}: Omit<ControllerProps<TValues, TName, TTransformed>, \"render\"> & {\n  label?: React.ReactNode\n  description?: React.ReactNode\n  orientation?: React.ComponentProps<typeof Field>[\"orientation\"]\n  className?: string\n  render: (props: {\n    field: ControllerRenderProps<TValues, TName>\n    fieldState: ControllerFieldState\n    control: FormControlProps\n  }) => React.ReactElement\n}) {\n  const id = React.useId()\n  const descriptionId = `${id}-description`\n  const errorId = `${id}-error`\n\n  return (\n    <Controller\n      {...controller}\n      render={({ field, fieldState }) => {\n        const describedBy = [description && descriptionId, fieldState.error && errorId].filter(Boolean).join(\" \")\n        return (\n          <Field data-invalid={fieldState.invalid} orientation={orientation} className={className}>\n            {label && <FieldLabel htmlFor={id}>{label}</FieldLabel>}\n            {render({\n              field,\n              fieldState,\n              control: { id, \"aria-invalid\": fieldState.invalid, \"aria-describedby\": describedBy || undefined },\n            })}\n            {description && <FieldDescription id={descriptionId}>{description}</FieldDescription>}\n            <FieldError id={errorId}>{fieldState.error?.message}</FieldError>\n          </Field>\n        )\n      }}\n    />\n  )\n}\n\nexport { FormField }\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "lib/validation.ts",
+      "content": "import { z } from \"zod\"\n\n/**\n * Shared zod schemas with Thai messages. Anything not covered here falls back\n * to zod's built-in Thai locale.\n */\nz.config(z.locales.th())\n\n/** Required text, trimmed. `required(\"ชื่อลูกค้า\")` → \"กรุณากรอกชื่อลูกค้า\" */\nexport const required = (label: string) => z.string().trim().min(1, `กรุณากรอก${label}`)\n\nexport const email = z\n  .string()\n  .trim()\n  .min(1, \"กรุณากรอกอีเมล\")\n  .pipe(z.email(\"รูปแบบอีเมลไม่ถูกต้อง\"))\n\n/** Thai mobile number. Accepts 081-234-5678, 081 234 5678 or 0812345678; outputs digits only. */\nexport const thaiMobile = z\n  .string()\n  .trim()\n  .min(1, \"กรุณากรอกเบอร์มือถือ\")\n  .transform((v) => v.replace(/[\\s-]/g, \"\"))\n  .pipe(z.string().regex(/^0[689]\\d{8}$/, \"เบอร์มือถือต้องขึ้นต้นด้วย 06, 08 หรือ 09 และมี 10 หลัก\"))\n\n/** True when a 13-digit Thai national/tax ID passes its mod-11 check digit */\nexport function isValidThaiId(id: string) {\n  if (!/^\\d{13}$/.test(id)) return false\n  const sum = [...id.slice(0, 12)].reduce((acc, d, i) => acc + Number(d) * (13 - i), 0)\n  return (11 - (sum % 11)) % 10 === Number(id[12])\n}\n\n/** เลขประจำตัวผู้เสียภาษี 13 หลัก (เลขบัตรประชาชนหรือนิติบุคคล). Dashes/spaces allowed; outputs digits only. */\nexport const thaiTaxId = z\n  .string()\n  .trim()\n  .min(1, \"กรุณากรอกเลขประจำตัวผู้เสียภาษี\")\n  .transform((v) => v.replace(/[\\s-]/g, \"\"))\n  .pipe(\n    z\n      .string()\n      .regex(/^\\d{13}$/, \"เลขประจำตัวผู้เสียภาษีต้องมี 13 หลัก\")\n      .refine(isValidThaiId, \"เลขประจำตัวผู้เสียภาษีไม่ถูกต้อง (ตรวจสอบหลักสุดท้าย)\")\n  )\n\n/** Wrap a string schema so an empty input becomes `undefined` — for optional fields */\nexport const optional = <T extends z.ZodType<unknown, string>>(schema: T) =>\n  z\n    .string()\n    .transform((v) => (v.trim() === \"\" ? undefined : v))\n    .pipe(schema.optional())\n",
+      "type": "registry:lib"
+    }
+  ],
+  "type": "registry:ui"
+}

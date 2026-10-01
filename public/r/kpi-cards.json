@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kpi-cards",
+  "title": "KPI Cards",
+  "description": "Row of metric cards with trend. Motion: Cards stagger in; numbers count up.",
+  "dependencies": [
+    "@solar-icons/react",
+    "cn",
+    "motion",
+    "recharts"
+  ],
+  "registryDependencies": [
+    "@ecsight/animated-number",
+    "@ecsight/card",
+    "@ecsight/foundation"
+  ],
+  "files": [
+    {
+      "path": "components/blocks/kpi-cards.tsx",
+      "content": "\"use client\"\n\nimport { motion } from \"motion/react\"\nimport { Area, AreaChart, YAxis } from \"recharts\"\nimport { ArrowRightDownIcon, ArrowRightUpIcon } from \"@solar-icons/react/linear\"\nimport { cn } from \"cn\"\n\nimport { fadeUp, listStagger } from \"@/lib/motion\"\nimport { AnimatedNumber } from \"@/components/ui/animated-number\"\nimport { Card, CardContent, CardDescription, CardHeader, CardTitle } from \"@/components/ui/card\"\n\nexport type Kpi = {\n  key: string\n  label: string\n  value: number\n  /** Percent change vs previous period */\n  delta: number\n  format?: Intl.NumberFormatOptions\n  /** Recent values, oldest first — drawn as a sparkline (≥ 2 points) */\n  trend?: readonly number[]\n}\n\n/** Tiny trend line, coloured like the delta. Decorative: the number and delta carry the meaning. */\nfunction Sparkline({ id, data, up }: { id: string; data: readonly number[]; up: boolean }) {\n  const color = up ? \"var(--success)\" : \"var(--destructive)\"\n  const points = data.map((v, i) => ({ i, v }))\n  return (\n    <div aria-hidden className=\"h-10 w-24 shrink-0\">\n      <AreaChart accessibilityLayer={false} tabIndex={-1} width={96} height={40} data={points} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>\n        <defs>\n          <linearGradient id={`spark-${id}`} x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n            <stop offset=\"0%\" stopColor={color} stopOpacity={0.3} />\n            <stop offset=\"100%\" stopColor={color} stopOpacity={0} />\n          </linearGradient>\n        </defs>\n        <YAxis hide domain={[\"dataMin\", \"dataMax\"]} />\n        <Area\n          dataKey=\"v\"\n          type=\"monotone\"\n          stroke={color}\n          strokeWidth={1.5}\n          fill={`url(#spark-${id})`}\n          isAnimationActive\n          animationDuration={600}\n          animationEasing=\"ease-out\"\n          dot={false}\n        />\n      </AreaChart>\n    </div>\n  )\n}\n\n/** Block: a row of KPI cards. Numbers count up on a spring; cards stagger in; optional sparkline per card. */\nexport function KpiCards({ items, className }: { items: readonly Kpi[]; className?: string }) {\n  return (\n    <motion.div\n      variants={listStagger}\n      initial=\"hidden\"\n      animate=\"visible\"\n      className={cn(\"grid gap-4 sm:grid-cols-2 xl:grid-cols-4\", className)}\n    >\n      {items.map((kpi) => {\n        const up = kpi.delta >= 0\n        return (\n          <motion.div key={kpi.key} variants={fadeUp}>\n            <Card className=\"gap-2\">\n              <CardHeader>\n                <CardDescription>{kpi.label}</CardDescription>\n                <CardTitle className=\"text-2xl font-semibold\">\n                  <AnimatedNumber value={kpi.value} format={kpi.format} />\n                </CardTitle>\n              </CardHeader>\n              <CardContent className=\"flex items-end justify-between gap-2\">\n                <div>\n                  <span\n                    className={cn(\n                      \"inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium tabular-nums\",\n                      up ? \"bg-success/10 text-success\" : \"bg-destructive/10 text-destructive\",\n                    )}\n                  >\n                    {up ? <ArrowRightUpIcon className=\"size-3.5\" /> : <ArrowRightDownIcon className=\"size-3.5\" />}\n                    {up ? \"+\" : \"\"}\n                    {kpi.delta.toFixed(1)}%\n                  </span>\n                  <span className=\"ml-2 text-xs text-muted-foreground\">เทียบเดือนก่อน</span>\n                </div>\n                {kpi.trend && kpi.trend.length > 1 && <Sparkline id={kpi.key} data={kpi.trend} up={up} />}\n              </CardContent>\n            </Card>\n          </motion.div>\n        )\n      })}\n    </motion.div>\n  )\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:block"
+}

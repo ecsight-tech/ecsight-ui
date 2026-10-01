@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast",
+  "title": "Toast (Sonner)",
+  "description": "Async feedback after an action. Motion: Sonner stack animation; Solar status icons.",
+  "dependencies": [
+    "@solar-icons/react",
+    "cn",
+    "next-themes",
+    "sonner"
+  ],
+  "registryDependencies": [
+    "@ecsight/button",
+    "@ecsight/foundation",
+    "@ecsight/spinner"
+  ],
+  "files": [
+    {
+      "path": "components/ui/sonner.tsx",
+      "content": "\"use client\"\n\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\nimport { CheckCircleIcon, CloseIcon, DangerTriangleIcon, InfoCircleIcon, CloseCircleIcon } from \"@solar-icons/react/linear\"\nimport { cn } from \"cn\"\n\nimport { buttonVariants } from \"@/components/ui/button\"\nimport { Spinner } from \"@/components/ui/spinner\"\n\n/** Icon disc tinted by toast type (sonner sets data-type on the toast) */\nconst iconTone = cn(\n  \"relative grid size-8 shrink-0 place-items-center rounded-full bg-muted text-muted-foreground [&_svg]:size-[18px]\",\n  \"group-data-[type=success]/toast:bg-success/10 group-data-[type=success]/toast:text-success\",\n  \"group-data-[type=error]/toast:bg-destructive/10 group-data-[type=error]/toast:text-destructive\",\n  \"group-data-[type=warning]/toast:bg-warning/15 group-data-[type=warning]/toast:text-warning-foreground\",\n  \"group-data-[type=info]/toast:bg-primary/10 group-data-[type=info]/toast:text-primary\"\n)\n\n/**\n * Sonner, fully styled with Ecsight tokens (`unstyled` drops sonner's own look but keeps\n * its stacking, swipe and enter/exit motion). Layout: tinted icon disc · title + description ·\n * optional action; ✕ appears on hover. Usage stays `toast.success(\"บันทึกแล้ว\", { description })`.\n */\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      gap={10}\n      closeButton\n      icons={{\n        success: <CheckCircleIcon />,\n        info: <InfoCircleIcon />,\n        warning: <DangerTriangleIcon />,\n        error: <CloseCircleIcon />,\n        loading: <Spinner />,\n        close: <CloseIcon className=\"size-3\" />,\n      }}\n      toastOptions={{\n        unstyled: true,\n        classNames: {\n          toast: cn(\n            \"group/toast pointer-events-auto flex w-(--width) items-start gap-3 rounded-xl border bg-popover p-3 pr-3.5\",\n            \"text-popover-foreground shadow-lg shadow-black/5 dark:shadow-black/30\"\n          ),\n          icon: iconTone,\n          content: \"grid min-w-0 flex-1 gap-0.5 pt-[5px]\",\n          title: \"text-sm leading-snug font-medium\",\n          description: \"text-[13px] leading-snug text-muted-foreground\",\n          actionButton: cn(buttonVariants({ size: \"sm\" }), \"shrink-0 self-center\"),\n          cancelButton: cn(buttonVariants({ variant: \"ghost\", size: \"sm\" }), \"shrink-0 self-center\"),\n          closeButton: cn(\n            \"absolute -top-2 -left-2 grid size-5 place-items-center rounded-full border bg-popover text-muted-foreground shadow-xs\",\n            \"opacity-0 transition-opacity duration-(--motion-fast) group-hover/toast:opacity-100 focus-visible:opacity-100 hover:text-foreground\"\n          ),\n        },\n      }}\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

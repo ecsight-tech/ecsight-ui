@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-badge",
+  "title": "Status Badge",
+  "description": "Record status: dot + label, 5 tones; `live` pulses for in-progress states. Motion: `live` dot pings (off with reduced motion).",
+  "dependencies": [
+    "class-variance-authority",
+    "cn"
+  ],
+  "registryDependencies": [
+    "@ecsight/foundation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/status-badge.tsx",
+      "content": "import { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"cn\"\n\nconst statusBadgeVariants = cva(\n  \"inline-flex h-6 shrink-0 items-center gap-1.5 rounded-md px-2 text-xs font-medium whitespace-nowrap\",\n  {\n    variants: {\n      tone: {\n        success: \"bg-success/10 text-success\",\n        warning: \"bg-warning/15 text-foreground [--dot:var(--warning)]\",\n        info: \"bg-primary/10 text-primary\",\n        danger: \"bg-destructive/10 text-destructive\",\n        neutral: \"bg-muted text-muted-foreground\",\n      },\n    },\n    defaultVariants: { tone: \"neutral\" },\n  }\n)\n\nexport type StatusTone = NonNullable<VariantProps<typeof statusBadgeVariants>[\"tone\"]>\n\n/**\n * Status of a record: dot + label on a tinted pill. The dot keeps status\n * readable without relying on colour alone in dense tables. `live` pulses the\n * dot — only for states that are actively changing (กำลังจัดส่ง, กำลังประมวลผล).\n * Map domain states to tones once, next to the data (e.g. `orderStatusTone`).\n */\nfunction StatusBadge({\n  tone,\n  live = false,\n  dot = true,\n  className,\n  children,\n  ...props\n}: React.ComponentProps<\"span\"> & VariantProps<typeof statusBadgeVariants> & { live?: boolean; dot?: boolean }) {\n  return (\n    <span data-slot=\"status-badge\" data-tone={tone} className={cn(statusBadgeVariants({ tone }), className)} {...props}>\n      {dot && (\n        <span aria-hidden className=\"relative flex size-1.5\">\n          {live && (\n            <span className=\"absolute inline-flex size-full animate-ping rounded-full bg-(--dot,currentColor) opacity-60 motion-reduce:hidden\" />\n          )}\n          <span className=\"relative inline-flex size-1.5 rounded-full bg-(--dot,currentColor)\" />\n        </span>\n      )}\n      {children}\n    </span>\n  )\n}\n\nexport { StatusBadge, statusBadgeVariants }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

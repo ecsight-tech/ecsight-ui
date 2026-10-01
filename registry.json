@@ -1,0 +1,1553 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "ecsight",
+  "homepage": "https://ui.1ecsight.com",
+  "items": [
+    {
+      "name": "foundation",
+      "type": "registry:style",
+      "title": "Ecsight Foundation",
+      "description": "Brand tokens (OKLCH, light/dark), motion tokens + presets, IBM Plex Sans/Thai fonts, Solar icons, providers. Install first.",
+      "dependencies": [
+        "motion",
+        "@solar-icons/react",
+        "next-themes",
+        "sonner",
+        "cn",
+        "nuqs"
+      ],
+      "registryDependencies": [
+        "@ecsight/font-plex-sans",
+        "@ecsight/font-plex-thai",
+        "@ecsight/font-plex-mono",
+        "@ecsight/toast",
+        "@ecsight/tooltip"
+      ],
+      "files": [
+        {
+          "path": "lib/motion.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/providers.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "font-sans": "var(--font-plex-sans), var(--font-plex-thai), ui-sans-serif, system-ui, sans-serif",
+          "font-mono": "var(--font-plex-mono), ui-monospace, monospace",
+          "color-brand": "var(--brand)",
+          "color-success": "var(--success)",
+          "color-warning": "var(--warning)",
+          "color-warning-foreground": "var(--warning-foreground)",
+          "ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
+          "ease-in": "cubic-bezier(0.4, 0, 1, 1)",
+          "ease-spring": "linear(0, 0.041, 0.142, 0.273, 0.412, 0.547, 0.669, 0.772, 0.856, 0.921, 0.969, 1.002, 1.023, 1.035, 1.04, 1.04, 1.037, 1.032, 1.026, 1.021, 1.016, 1.011, 1.007, 1.004, 1)",
+          "text-xs--line-height": "1.5",
+          "text-sm--line-height": "1.6",
+          "text-base--line-height": "1.65",
+          "text-lg--line-height": "1.6",
+          "text-xl--line-height": "1.5",
+          "text-2xl--line-height": "1.45",
+          "text-3xl--line-height": "1.35"
+        },
+        "light": {
+          "brand-h": "262.6",
+          "brand-c": "0.259",
+          "brand": "oklch(0.535 var(--brand-c) var(--brand-h))",
+          "motion-fast": "120ms",
+          "motion-base": "180ms",
+          "motion-slow": "260ms",
+          "motion-spring": "320ms",
+          "radius": "0.625rem",
+          "control-h": "2.25rem",
+          "table-head-h": "2.5rem",
+          "table-cell-py": "0.5rem",
+          "background": "oklch(1 0 0)",
+          "foreground": "oklch(0.16 0.01 var(--brand-h))",
+          "card": "oklch(1 0 0)",
+          "card-foreground": "var(--foreground)",
+          "popover": "oklch(1 0 0)",
+          "popover-foreground": "var(--foreground)",
+          "primary": "var(--brand)",
+          "primary-foreground": "oklch(0.99 0 0)",
+          "secondary": "oklch(0.965 0.006 var(--brand-h))",
+          "secondary-foreground": "oklch(0.22 0.01 var(--brand-h))",
+          "muted": "oklch(0.965 0.004 var(--brand-h))",
+          "muted-foreground": "oklch(0.5 0.012 var(--brand-h))",
+          "accent": "oklch(0.955 0.025 var(--brand-h))",
+          "accent-foreground": "oklch(0.38 0.14 var(--brand-h))",
+          "destructive": "oklch(0.54 0.22 27.325)",
+          "success": "oklch(0.51 0.13 155)",
+          "warning": "oklch(0.72 0.16 70)",
+          "warning-foreground": "oklch(0.25 0.06 70)",
+          "border": "oklch(0.92 0.006 var(--brand-h))",
+          "input": "oklch(0.9 0.008 var(--brand-h))",
+          "ring": "oklch(0.535 var(--brand-c) var(--brand-h) / 60%)",
+          "chart-1": "var(--brand)",
+          "chart-2": "oklch(0.44 0.16 50)",
+          "chart-3": "oklch(0.64 0.08 190)",
+          "chart-4": "oklch(0.4 0.15 350)",
+          "chart-5": "oklch(0.52 0.03 var(--brand-h))",
+          "sidebar": "oklch(0.985 0.003 var(--brand-h))",
+          "sidebar-foreground": "var(--foreground)",
+          "sidebar-primary": "var(--primary)",
+          "sidebar-primary-foreground": "var(--primary-foreground)",
+          "sidebar-accent": "oklch(0.95 0.012 var(--brand-h))",
+          "sidebar-accent-foreground": "oklch(0.2 0.02 var(--brand-h))",
+          "sidebar-border": "var(--border)",
+          "sidebar-ring": "var(--ring)"
+        },
+        "dark": {
+          "background": "oklch(0.15 0.008 var(--brand-h))",
+          "foreground": "oklch(0.97 0.003 var(--brand-h))",
+          "card": "oklch(0.19 0.01 var(--brand-h))",
+          "card-foreground": "var(--foreground)",
+          "popover": "oklch(0.21 0.012 var(--brand-h))",
+          "popover-foreground": "var(--foreground)",
+          "primary": "oklch(0.66 0.18 var(--brand-h))",
+          "primary-foreground": "oklch(0.15 0.02 var(--brand-h))",
+          "secondary": "oklch(0.26 0.012 var(--brand-h))",
+          "secondary-foreground": "var(--foreground)",
+          "muted": "oklch(0.25 0.01 var(--brand-h))",
+          "muted-foreground": "oklch(0.7 0.012 var(--brand-h))",
+          "accent": "oklch(0.28 0.05 var(--brand-h))",
+          "accent-foreground": "oklch(0.88 0.08 var(--brand-h))",
+          "destructive": "oklch(0.704 0.191 22.216)",
+          "success": "oklch(0.72 0.15 155)",
+          "warning": "oklch(0.8 0.15 75)",
+          "warning-foreground": "oklch(0.25 0.06 70)",
+          "border": "oklch(1 0 0 / 10%)",
+          "input": "oklch(1 0 0 / 15%)",
+          "ring": "oklch(0.66 0.18 var(--brand-h) / 60%)",
+          "chart-1": "oklch(0.66 0.18 var(--brand-h))",
+          "chart-2": "oklch(0.56 0.16 50)",
+          "chart-3": "oklch(0.84 0.08 190)",
+          "chart-4": "oklch(0.52 0.15 350)",
+          "chart-5": "oklch(0.68 0.03 var(--brand-h))",
+          "sidebar": "oklch(0.17 0.009 var(--brand-h))",
+          "sidebar-foreground": "var(--foreground)",
+          "sidebar-primary": "var(--primary)",
+          "sidebar-primary-foreground": "var(--primary-foreground)",
+          "sidebar-accent": "oklch(0.25 0.02 var(--brand-h))",
+          "sidebar-accent-foreground": "var(--foreground)",
+          "sidebar-border": "oklch(1 0 0 / 8%)",
+          "sidebar-ring": "var(--ring)"
+        }
+      },
+      "css": {
+        "@layer base": {
+          ":lang(th)": {
+            "line-height": "1.65"
+          },
+          "[data-density=\"compact\"]": {
+            "--control-h": "2rem",
+            "--table-head-h": "2.25rem",
+            "--table-cell-py": "0.25rem"
+          },
+          "[data-slot=\"table\"], [data-numeric]": {
+            "font-variant-numeric": "tabular-nums"
+          }
+        },
+        "@layer components": {
+          "[data-slot$=\"-content\"][data-state=\"open\"], [data-slot$=\"-content\"][data-state=\"delayed-open\"], [data-slot$=\"-content\"][data-state=\"instant-open\"]": {
+            "--tw-animation-duration": "var(--motion-spring)",
+            "--tw-ease": "var(--ease-spring)"
+          },
+          "[data-slot$=\"-content\"][data-state=\"closed\"]": {
+            "--tw-animation-duration": "var(--motion-fast)",
+            "--tw-ease": "var(--ease-in)"
+          },
+          "[data-slot=\"sheet-content\"][data-state=\"open\"]": {
+            "--tw-animation-duration": "var(--motion-slow)",
+            "--tw-ease": "var(--ease-out)"
+          },
+          "[data-slot$=\"-overlay\"][data-state]": {
+            "--tw-animation-duration": "var(--motion-base)",
+            "--tw-ease": "var(--ease-out)"
+          },
+          "[data-slot=\"accordion-content\"][data-state], [data-slot=\"collapsible-content\"][data-state]": {
+            "--tw-animation-duration": "var(--motion-slow)",
+            "--tw-ease": "var(--ease-out)"
+          },
+          "[data-slot=\"field\"][data-invalid=\"true\"]": {
+            "animation": "field-shake 320ms var(--ease-out)"
+          },
+          ".calendar-weeks-before-enter": {
+            "animation": "calendar-in-left var(--motion-slow) var(--ease-out) forwards"
+          },
+          ".calendar-weeks-after-enter": {
+            "animation": "calendar-in-right var(--motion-slow) var(--ease-out) forwards"
+          },
+          ".calendar-weeks-before-exit": {
+            "animation": "calendar-out-left var(--motion-slow) var(--ease-out) forwards"
+          },
+          ".calendar-weeks-after-exit": {
+            "animation": "calendar-out-right var(--motion-slow) var(--ease-out) forwards"
+          },
+          ".calendar-caption-enter": {
+            "animation": "calendar-fade-in var(--motion-slow) var(--ease-out) forwards"
+          },
+          ".calendar-caption-exit": {
+            "animation": "calendar-fade-out var(--motion-slow) var(--ease-out) forwards"
+          }
+        },
+        "@keyframes calendar-in-left": {
+          "from": {
+            "transform": "translateX(-100%)",
+            "opacity": "0"
+          },
+          "to": {
+            "transform": "none",
+            "opacity": "1"
+          }
+        },
+        "@keyframes calendar-in-right": {
+          "from": {
+            "transform": "translateX(100%)",
+            "opacity": "0"
+          },
+          "to": {
+            "transform": "none",
+            "opacity": "1"
+          }
+        },
+        "@keyframes calendar-out-left": {
+          "from": {
+            "transform": "none",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "translateX(-100%)",
+            "opacity": "0"
+          }
+        },
+        "@keyframes calendar-out-right": {
+          "from": {
+            "transform": "none",
+            "opacity": "1"
+          },
+          "to": {
+            "transform": "translateX(100%)",
+            "opacity": "0"
+          }
+        },
+        "@keyframes calendar-fade-in": {
+          "from": {
+            "opacity": "0"
+          },
+          "to": {
+            "opacity": "1"
+          }
+        },
+        "@keyframes calendar-fade-out": {
+          "from": {
+            "opacity": "1"
+          },
+          "to": {
+            "opacity": "0"
+          }
+        },
+        "@keyframes field-shake": {
+          "0%, 100%": {
+            "transform": "translateX(0)"
+          },
+          "20%": {
+            "transform": "translateX(-4px)"
+          },
+          "40%": {
+            "transform": "translateX(4px)"
+          },
+          "60%": {
+            "transform": "translateX(-2px)"
+          },
+          "80%": {
+            "transform": "translateX(2px)"
+          }
+        },
+        "@media (prefers-reduced-motion: reduce)": {
+          "*, *::before, *::after": {
+            "animation-duration": "1ms !important",
+            "animation-iteration-count": "1 !important",
+            "transition-duration": "1ms !important",
+            "scroll-behavior": "auto !important"
+          }
+        }
+      }
+    },
+    {
+      "name": "font-plex-sans",
+      "type": "registry:font",
+      "title": "IBM Plex Sans",
+      "font": {
+        "family": "IBM Plex Sans",
+        "import": "IBM_Plex_Sans",
+        "variable": "--font-plex-sans",
+        "subsets": [
+          "latin"
+        ],
+        "weight": [
+          "400",
+          "500",
+          "600",
+          "700"
+        ],
+        "provider": "google"
+      }
+    },
+    {
+      "name": "font-plex-thai",
+      "type": "registry:font",
+      "title": "IBM Plex Sans Thai Looped",
+      "font": {
+        "family": "IBM Plex Sans Thai Looped",
+        "import": "IBM_Plex_Sans_Thai_Looped",
+        "variable": "--font-plex-thai",
+        "subsets": [
+          "thai"
+        ],
+        "weight": [
+          "400",
+          "500",
+          "600",
+          "700"
+        ],
+        "provider": "google"
+      }
+    },
+    {
+      "name": "font-plex-mono",
+      "type": "registry:font",
+      "title": "IBM Plex Mono",
+      "font": {
+        "family": "IBM Plex Mono",
+        "import": "IBM_Plex_Mono",
+        "variable": "--font-plex-mono",
+        "subsets": [
+          "latin"
+        ],
+        "weight": [
+          "400",
+          "500"
+        ],
+        "provider": "google"
+      }
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Actions. One primary per view. Motion: Scales to 0.97 on press. `loading` keeps colour and width, spinner overlays the label.",
+      "dependencies": [
+        "class-variance-authority",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation",
+        "@ecsight/spinner"
+      ],
+      "files": [
+        {
+          "path": "components/ui/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Single-line text field. Pair with Label above.",
+      "dependencies": [
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "Input Group",
+      "description": "Input with icon, text or button addons.",
+      "dependencies": [
+        "class-variance-authority",
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/foundation",
+        "@ecsight/input",
+        "@ecsight/textarea"
+      ],
+      "files": [
+        {
+          "path": "components/ui/input-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Multi-line text field.",
+      "dependencies": [
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/textarea.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "Label + control + description + error, with validation state. Motion: Errors slide open (height + fade); invalid field shakes once.",
+      "dependencies": [
+        "class-variance-authority",
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation",
+        "@ecsight/label",
+        "@ecsight/separator"
+      ],
+      "files": [
+        {
+          "path": "components/ui/field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "form",
+      "type": "registry:ui",
+      "title": "Form",
+      "description": "react-hook-form + zod wired into Field; Thai validators in lib/validation. Motion: Errors slide open; a field shakes once when it turns invalid; focus jumps to the first error.",
+      "dependencies": [
+        "react-hook-form",
+        "zod"
+      ],
+      "registryDependencies": [
+        "@ecsight/field",
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/form.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "lib/validation.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "calendar",
+      "type": "registry:ui",
+      "title": "Calendar",
+      "description": "Month grid — พ.ศ. by default, Sunday-first, Arabic digits. Click the caption for a month/year grid; วันนี้ jumps back. Motion: Months slide in from the side they come from (260ms ease-out); the month/year panel fades in.",
+      "dependencies": [
+        "@daypicker/buddhist",
+        "@daypicker/react",
+        "@solar-icons/react",
+        "cn",
+        "date-fns"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/foundation",
+        "@ecsight/select"
+      ],
+      "files": [
+        {
+          "path": "components/ui/calendar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date Picker",
+      "description": "Typeable DateInput, DatePicker and DateRangePicker (presets incl. ปีงบประมาณ, hover preview, max span). Motion: Popover springs in; the range closes itself once both ends are picked.",
+      "dependencies": [
+        "@daypicker/react",
+        "@solar-icons/react",
+        "cn",
+        "date-fns"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/calendar",
+        "@ecsight/foundation",
+        "@ecsight/input-group",
+        "@ecsight/popover"
+      ],
+      "files": [
+        {
+          "path": "components/ui/date-picker.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "lib/format.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "hooks/use-mobile.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Accessible label for form controls.",
+      "dependencies": [
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/label.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Pick one option from a short list (≤ 12). Motion: Content pops in on the spring curve.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "Searchable select built from Popover + Command. Motion: Popover springs in; list filters instantly.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cmdk",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/dialog",
+        "@ecsight/foundation",
+        "@ecsight/input-group"
+      ],
+      "files": [
+        {
+          "path": "components/ui/command.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Independent on/off choices, multi-select. Motion: Checkmark zooms in with a spring overshoot.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/checkbox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Settings that apply immediately. Motion: Thumb slides on the spring curve.",
+      "dependencies": [
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/switch.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio Group",
+      "description": "One choice from 2–5 visible options.",
+      "dependencies": [
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/radio-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle Group",
+      "description": "Segmented control for views and ranges. Motion: Selected item indicator glides between options (type=\"single\").",
+      "dependencies": [
+        "class-variance-authority",
+        "cn",
+        "motion",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/toggle-group.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/toggle.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Blocking confirmation or short focused task. Motion: Zoom + fade in on spring; exits fast (120ms ease-in).",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "Side panel for create/edit forms and details. Motion: Slides from the edge, ease-out 260ms (no overshoot at edges).",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/sheet.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown Menu",
+      "description": "Contextual actions behind a trigger. Motion: Springs in from the trigger side.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/dropdown-menu.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Non-blocking floating content. Motion: Springs in from the trigger side.",
+      "dependencies": [
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Short label for icon-only controls. Motion: 300ms delay, springs in.",
+      "dependencies": [
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/tooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Switch between peer views in one context. Motion: Active pill / underline glides between tabs (layoutId, snappy spring).",
+      "dependencies": [
+        "class-variance-authority",
+        "cn",
+        "motion",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/tabs.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Collapsible sections — FAQs, advanced settings. Motion: Height eases open 260ms (no overshoot); arrow rotates.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/accordion.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Groups related content and actions.",
+      "dependencies": [
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Status and counts.",
+      "dependencies": [
+        "class-variance-authority",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "Person or organisation; Thai initials supported.",
+      "dependencies": [
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/avatar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Tabular data with tabular numbers.",
+      "dependencies": [
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/table.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Location within the app hierarchy.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/breadcrumb.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast (Sonner)",
+      "description": "Async feedback after an action. Motion: Sonner stack animation; Solar status icons.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "next-themes",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/foundation",
+        "@ecsight/spinner"
+      ],
+      "files": [
+        {
+          "path": "components/ui/sonner.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Inline, persistent message in the page.",
+      "dependencies": [
+        "class-variance-authority",
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/alert.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Determinate progress toward a goal. Motion: Fills with ease-out over 700ms.",
+      "dependencies": [
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/progress.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Placeholder while content loads (> 300ms). Motion: Gentle pulse.",
+      "dependencies": [
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/skeleton.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "Visual divider.",
+      "dependencies": [
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/separator.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "chart",
+      "type": "registry:ui",
+      "title": "Chart",
+      "description": "Recharts wrapper themed with --chart-* tokens. Motion: Series draw in 600ms ease-out.",
+      "dependencies": [
+        "cn",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/chart.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "App navigation; see the App Shell block.",
+      "dependencies": [
+        "@solar-icons/react",
+        "class-variance-authority",
+        "cn",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/foundation",
+        "@ecsight/input",
+        "@ecsight/separator",
+        "@ecsight/sheet",
+        "@ecsight/skeleton",
+        "@ecsight/tooltip"
+      ],
+      "files": [
+        {
+          "path": "components/ui/sidebar.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "hooks/use-mobile.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "icon",
+      "type": "registry:ui",
+      "title": "Icon",
+      "description": "Solar icon with animated Linear → Bold swap for state. Motion: Swap: scale + rotate on a bouncy spring.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/icon.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "logo",
+      "type": "registry:ui",
+      "title": "Logo",
+      "description": "Ecsight mark (#0056FF) and mark + wordmark lockup.",
+      "dependencies": [
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/logo.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Keyboard keys and shortcuts (⌘K, G แล้ว O).",
+      "dependencies": [
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/kbd.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "status-badge",
+      "type": "registry:ui",
+      "title": "Status Badge",
+      "description": "Record status: dot + label, 5 tones; `live` pulses for in-progress states. Motion: `live` dot pings (off with reduced motion).",
+      "dependencies": [
+        "class-variance-authority",
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/status-badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "multi-select",
+      "type": "registry:ui",
+      "title": "Multi Select",
+      "description": "Pick several values; chips in the trigger, search, groups, select all / clear. Motion: Chips pop in/out and reflow (layout).",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/badge",
+        "@ecsight/button",
+        "@ecsight/combobox",
+        "@ecsight/foundation",
+        "@ecsight/popover"
+      ],
+      "files": [
+        {
+          "path": "components/ui/multi-select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "file-dropzone",
+      "type": "registry:ui",
+      "title": "File Dropzone",
+      "description": "Drag/drop/paste upload with per-file progress, errors, retry and rejection reasons. Motion: Icon lifts on drag-over; rows slide in.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "motion",
+        "react-dropzone"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/foundation",
+        "@ecsight/progress"
+      ],
+      "files": [
+        {
+          "path": "components/ui/file-dropzone.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "title": "Stepper",
+      "description": "Progress through a multi-step flow; jump back to completed steps. Motion: Connector fills on a spring; check pops in.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/stepper.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "Activity feed / order history with relative Thai time. Motion: Items stagger in.",
+      "dependencies": [
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation",
+        "@ecsight/status-badge",
+        "@ecsight/tooltip"
+      ],
+      "files": [
+        {
+          "path": "components/ui/timeline.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "lib/format.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "Indeterminate loading inside buttons and toasts.",
+      "dependencies": [
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/spinner.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "animated-number",
+      "type": "registry:ui",
+      "title": "Animated Number",
+      "description": "KPI value that counts up when it enters view. Motion: 900ms ease-out tween — never overshoots.",
+      "dependencies": [
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/animated-number.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "count-badge",
+      "type": "registry:ui",
+      "title": "Count Badge",
+      "description": "Unread / cart counts on icons. Motion: Pops in/out on a bouncy spring; digits roll in the direction of change.",
+      "dependencies": [
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/count-badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:ui",
+      "title": "Empty State",
+      "description": "Nothing to show — explain why and offer a next step. Motion: Icon, title, text, action stagger in.",
+      "dependencies": [
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation",
+        "@ecsight/icon"
+      ],
+      "files": [
+        {
+          "path": "components/ui/empty-state.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:block",
+      "title": "App Shell",
+      "description": "Sidebar + top bar frame with ⌘K, theme toggle, account menu. Motion: Active nav pill glides (layoutId) and icon swaps Linear → Bold.",
+      "dependencies": [
+        "@solar-icons/react",
+        "motion",
+        "next-themes",
+        "react-hotkeys-hook"
+      ],
+      "registryDependencies": [
+        "@ecsight/avatar",
+        "@ecsight/breadcrumb",
+        "@ecsight/button",
+        "@ecsight/combobox",
+        "@ecsight/count-badge",
+        "@ecsight/dialog",
+        "@ecsight/dropdown-menu",
+        "@ecsight/foundation",
+        "@ecsight/icon",
+        "@ecsight/kbd",
+        "@ecsight/logo",
+        "@ecsight/separator",
+        "@ecsight/sidebar",
+        "@ecsight/tooltip"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/app-shell.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "hooks/use-density.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "hooks/use-local-storage.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "kpi-cards",
+      "type": "registry:block",
+      "title": "KPI Cards",
+      "description": "Row of metric cards with trend. Motion: Cards stagger in; numbers count up.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "motion",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "@ecsight/animated-number",
+        "@ecsight/card",
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/kpi-cards.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "revenue-chart",
+      "type": "registry:block",
+      "title": "Revenue Chart",
+      "description": "Stacked area chart with range switcher.",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "@ecsight/card",
+        "@ecsight/chart",
+        "@ecsight/foundation",
+        "@ecsight/toggle-group"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/revenue-chart.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "orders-table",
+      "type": "registry:block",
+      "title": "Data Table",
+      "description": "Search, faceted filters with counts, sort, show/hide columns, bulk-action bar, pagination — view state in the URL. Motion: Rows animate in/out with layout transitions.",
+      "dependencies": [
+        "@solar-icons/react",
+        "@tanstack/react-table",
+        "cn",
+        "date-fns",
+        "motion",
+        "nuqs",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "@ecsight/badge",
+        "@ecsight/button",
+        "@ecsight/card",
+        "@ecsight/checkbox",
+        "@ecsight/combobox",
+        "@ecsight/dropdown-menu",
+        "@ecsight/empty-state",
+        "@ecsight/foundation",
+        "@ecsight/input-group",
+        "@ecsight/kbd",
+        "@ecsight/popover",
+        "@ecsight/select",
+        "@ecsight/separator",
+        "@ecsight/status-badge",
+        "@ecsight/table"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/orders-table.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/blocks/data-table/data-table-faceted-filter.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/blocks/data-table/data-table-view-options.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/blocks/data-table/data-table-pagination.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/blocks/data-table/data-table-bulk-bar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "lib/demo-data.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "hooks/use-local-storage.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "hooks/use-table-url-state.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "lib/format.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/search-params.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "virtual-table",
+      "type": "registry:block",
+      "title": "Virtual Table",
+      "description": "10,000 rows, sticky header, sort — only visible rows render. Motion: None on rows by design — animation fights virtualization.",
+      "dependencies": [
+        "@solar-icons/react",
+        "@tanstack/react-table",
+        "@tanstack/react-virtual",
+        "cn",
+        "date-fns"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/card",
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/virtual-table.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "lib/demo-data.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/format.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "customer-sheet",
+      "type": "registry:block",
+      "title": "Form in Sheet",
+      "description": "Create form pattern with pending state and toast.",
+      "dependencies": [
+        "@hookform/resolvers",
+        "@solar-icons/react",
+        "motion",
+        "react-hook-form",
+        "sonner",
+        "zod"
+      ],
+      "registryDependencies": [
+        "@ecsight/alert",
+        "@ecsight/button",
+        "@ecsight/form",
+        "@ecsight/foundation",
+        "@ecsight/input",
+        "@ecsight/label",
+        "@ecsight/radio-group",
+        "@ecsight/select",
+        "@ecsight/sheet",
+        "@ecsight/spinner",
+        "@ecsight/switch",
+        "@ecsight/textarea"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/customer-sheet.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "lib/validation.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "login-form",
+      "type": "registry:block",
+      "title": "Login",
+      "description": "Sign-in card with password reveal. Motion: Fields stagger in; eye icon swaps.",
+      "dependencies": [
+        "@solar-icons/react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/card",
+        "@ecsight/checkbox",
+        "@ecsight/foundation",
+        "@ecsight/icon",
+        "@ecsight/input",
+        "@ecsight/input-group",
+        "@ecsight/label",
+        "@ecsight/logo"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/login-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

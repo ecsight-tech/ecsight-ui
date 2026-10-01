@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "font-plex-mono",
+  "title": "IBM Plex Mono",
+  "type": "registry:font",
+  "font": {
+    "family": "IBM Plex Mono",
+    "provider": "google",
+    "import": "IBM_Plex_Mono",
+    "variable": "--font-plex-mono",
+    "weight": [
+      "400",
+      "500"
+    ],
+    "subsets": [
+      "latin"
+    ]
+  }
+}

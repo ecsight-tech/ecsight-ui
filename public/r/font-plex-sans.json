@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "font-plex-sans",
+  "title": "IBM Plex Sans",
+  "type": "registry:font",
+  "font": {
+    "family": "IBM Plex Sans",
+    "provider": "google",
+    "import": "IBM_Plex_Sans",
+    "variable": "--font-plex-sans",
+    "weight": [
+      "400",
+      "500",
+      "600",
+      "700"
+    ],
+    "subsets": [
+      "latin"
+    ]
+  }
+}

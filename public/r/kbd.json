@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd",
+  "title": "Kbd",
+  "description": "Keyboard keys and shortcuts (⌘K, G แล้ว O).",
+  "dependencies": [
+    "cn"
+  ],
+  "registryDependencies": [
+    "@ecsight/foundation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/kbd.tsx",
+      "content": "import { cn } from \"cn\"\n\n/** One key: `<Kbd>⌘</Kbd>`. Use in tooltips, menus (`DropdownMenuShortcut`) and help text. */\nfunction Kbd({ className, ...props }: React.ComponentProps<\"kbd\">) {\n  return (\n    <kbd\n      data-slot=\"kbd\"\n      className={cn(\n        \"pointer-events-none inline-flex h-5 min-w-5 items-center justify-center gap-1 rounded-[5px] border border-b-2 bg-muted px-1 font-sans text-[0.7rem] font-medium text-muted-foreground select-none\",\n        \"in-data-[slot=tooltip-content]:border-background/20 in-data-[slot=tooltip-content]:bg-background/15 in-data-[slot=tooltip-content]:text-background\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\n/** A chord or sequence: `<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>`; pass `then` for sequences like g → o */\nfunction KbdGroup({ className, children, then, ...props }: React.ComponentProps<\"span\"> & { then?: boolean }) {\n  const keys = Array.isArray(children) ? children : [children]\n  return (\n    <span data-slot=\"kbd-group\" className={cn(\"inline-flex items-center gap-0.5\", className)} {...props}>\n      {then\n        ? keys.map((k, i) => (\n            <span key={i} className=\"inline-flex items-center gap-0.5\">\n              {i > 0 && <span className=\"px-0.5 text-[0.7rem] text-muted-foreground\">แล้ว</span>}\n              {k}\n            </span>\n          ))\n        : children}\n    </span>\n  )\n}\n\nexport { Kbd, KbdGroup }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

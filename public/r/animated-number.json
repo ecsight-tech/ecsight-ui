@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "animated-number",
+  "title": "Animated Number",
+  "description": "KPI value that counts up when it enters view. Motion: 900ms ease-out tween — never overshoots.",
+  "dependencies": [
+    "cn",
+    "motion"
+  ],
+  "registryDependencies": [
+    "@ecsight/foundation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/animated-number.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { animate, useInView, useMotionValue, useReducedMotion, useTransform, motion } from \"motion/react\"\nimport { cn } from \"cn\"\n\nimport { ease } from \"@/lib/motion\"\n\ntype AnimatedNumberProps = Omit<React.ComponentProps<typeof motion.span>, \"children\"> & {\n  value: number\n  /** Passed to Intl.NumberFormat — e.g. { style: \"currency\", currency: \"THB\" } */\n  format?: Intl.NumberFormatOptions\n  locale?: string\n}\n\n/** Counts up to `value` when it first scrolls into view and whenever it changes. */\nfunction AnimatedNumber({ value, format, locale = \"th-TH\", className, ...props }: AnimatedNumberProps) {\n  const ref = React.useRef<HTMLSpanElement>(null)\n  const inView = useInView(ref, { once: true })\n  const reduce = useReducedMotion()\n  const mv = useMotionValue(0)\n  const formatter = React.useMemo(\n    () => new Intl.NumberFormat(locale, { maximumFractionDigits: 0, ...format }),\n    [locale, format]\n  )\n  const text = useTransform(mv, (v) => formatter.format(v))\n\n  React.useEffect(() => {\n    if (!inView) return\n    if (reduce) {\n      mv.set(value)\n      return\n    }\n    // Ease-out tween, not a spring: a counter must never overshoot its real value\n    const controls = animate(mv, value, { duration: 0.9, ease: ease.out })\n    return () => controls.stop()\n  }, [inView, reduce, value, mv])\n\n  return (\n    <motion.span ref={ref} data-slot=\"animated-number\" data-numeric className={cn(\"tabular-nums\", className)} {...props}>\n      {text}\n    </motion.span>\n  )\n}\n\nexport { AnimatedNumber }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

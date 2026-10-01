@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "icon",
+  "title": "Icon",
+  "description": "Solar icon with animated Linear → Bold swap for state. Motion: Swap: scale + rotate on a bouncy spring.",
+  "dependencies": [
+    "@solar-icons/react",
+    "cn",
+    "motion"
+  ],
+  "registryDependencies": [
+    "@ecsight/foundation"
+  ],
+  "files": [
+    {
+      "path": "components/ui/icon.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { AnimatePresence, motion } from \"motion/react\"\nimport { cn } from \"cn\"\n\nimport { iconSwap } from \"@/lib/motion\"\n\ntype SolarIcon = React.ComponentType<React.ComponentProps<\"svg\"> & { alt?: string }>\n\ntype IconProps = Omit<React.ComponentProps<\"svg\">, \"ref\"> & {\n  /** Solar icon in its resting style — import from `@solar-icons/react/linear` */\n  as: SolarIcon\n  /** Same glyph in its active style — import from `@solar-icons/react/bold` (or `bold-duotone`) */\n  activeAs?: SolarIcon\n  /** Swaps `as` → `activeAs` with a spring (selected nav item, toggled favourite, …) */\n  active?: boolean\n  /** Accessible name. Omit for decorative icons next to visible text. */\n  label?: string\n}\n\n/**\n * The only way to render an icon whose style depends on state.\n * Static icons can be imported from `@solar-icons/react/linear` directly.\n *\n * @example\n * import { HomeIcon } from \"@solar-icons/react/linear\"\n * import { HomeIcon as HomeBold } from \"@solar-icons/react/bold\"\n * <Icon as={HomeIcon} activeAs={HomeBold} active={isCurrent} />\n */\nfunction Icon({ as: Rest, activeAs: Active, active = false, label, className, ...props }: IconProps) {\n  const a11y = label ? { role: \"img\", \"aria-label\": label } : { \"aria-hidden\": true as const }\n\n  if (!Active) {\n    return <Rest data-slot=\"icon\" className={className} {...a11y} {...props} />\n  }\n\n  const Current = active ? Active : Rest\n  return (\n    <span\n      data-slot=\"icon\"\n      data-active={active || undefined}\n      className=\"inline-grid shrink-0 place-items-center *:col-start-1 *:row-start-1\"\n      {...a11y}\n    >\n      <AnimatePresence initial={false}>\n        <motion.span\n          key={active ? \"active\" : \"rest\"}\n          variants={iconSwap}\n          initial=\"hidden\"\n          animate=\"visible\"\n          exit=\"exit\"\n          className=\"inline-flex\"\n        >\n          <Current className={cn(\"size-4\", className)} aria-hidden {...props} />\n        </motion.span>\n      </AnimatePresence>\n    </span>\n  )\n}\n\nexport { Icon, type SolarIcon }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
