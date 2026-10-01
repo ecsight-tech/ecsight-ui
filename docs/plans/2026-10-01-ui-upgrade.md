@@ -156,7 +156,9 @@
 
 ---
 
-## Phase 3: Quality tooling
+## Phase 3: Quality tooling ✅ เสร็จ 2026-10-01 (v0.5.1)
+
+**ผลที่ได้:** `pnpm test:ui` มี 220 checks (55 หน้า × 2 ธีม × 2 ขนาดจอ) ใช้เวลาราว 2 นาที รันซ้ำแล้ว snapshot นิ่ง และลองทำ regression ให้ดูแล้ว ชุดทดสอบจับได้จริง axe เจอปัญหาจริง 4 กลุ่ม แก้ครบแล้ว (ดู design.md 0.5.1) ส่วน jsx-a11y ทำเป็นสคริปต์ `pnpm lint:a11y` แยกต่างหาก เพราะ hook บล็อกการแก้ `eslint.config.mjs` ถ้าปลด hook ได้เมื่อไร ควรย้ายเข้า config
 
 - **Playwright + @axe-core/playwright**
   - อ่านรายการ slug จาก `lib/catalog.ts` แล้วเปิดทุกหน้าใน gallery ทั้ง light/dark และ 1280/375

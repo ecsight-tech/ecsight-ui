@@ -17,7 +17,8 @@ export async function CodeBlock({
 }) {
   const html = await codeToHtml(code, {
     lang,
-    themes: { light: "github-light", dark: "github-dark-dimmed" },
+    // high-contrast light theme: github-light's orange/red/green tokens fall below 4.5:1 on our muted bg
+    themes: { light: "github-light-high-contrast", dark: "github-dark-dimmed" },
     defaultColor: false,
   })
 

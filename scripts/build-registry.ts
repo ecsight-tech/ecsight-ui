@@ -101,6 +101,7 @@ const ecsightThemeKeys = [
   "color-brand",
   "color-success",
   "color-warning",
+  "color-warning-foreground",
   "ease-out",
   "ease-in",
   "ease-spring",

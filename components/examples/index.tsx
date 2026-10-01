@@ -586,7 +586,14 @@ export function ComboboxExample() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" role="combobox" aria-expanded={open} className="w-56 justify-between font-normal">
+        {/* role="combobox" takes its name from a label, not its text — give it one */}
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          aria-label={value ? `เฟรมเวิร์ก: ${value}` : "เลือกเฟรมเวิร์ก"}
+          className="w-56 justify-between font-normal"
+        >
           {value || "เลือกเฟรมเวิร์ก…"}
           <AltArrowDownIcon className="text-muted-foreground" />
         </Button>

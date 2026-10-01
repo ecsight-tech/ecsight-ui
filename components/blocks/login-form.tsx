@@ -45,7 +45,7 @@ export function LoginForm() {
           <motion.div variants={fadeUp} className="grid gap-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="login-password">รหัสผ่าน</Label>
-              <a href="#" className="text-xs text-primary underline-offset-4 hover:underline">
+              <a href="/forgot-password" className="text-xs text-primary underline-offset-4 hover:underline">
                 ลืมรหัสผ่าน?
               </a>
             </div>

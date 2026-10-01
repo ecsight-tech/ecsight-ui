@@ -26,7 +26,7 @@ function Sparkline({ id, data, up }: { id: string; data: readonly number[]; up: 
   const points = data.map((v, i) => ({ i, v }))
   return (
     <div aria-hidden className="h-10 w-24 shrink-0">
-      <AreaChart width={96} height={40} data={points} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
+      <AreaChart accessibilityLayer={false} tabIndex={-1} width={96} height={40} data={points} margin={{ top: 4, right: 0, bottom: 0, left: 0 }}>
         <defs>
           <linearGradient id={`spark-${id}`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={color} stopOpacity={0.3} />

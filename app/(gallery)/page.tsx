@@ -23,7 +23,7 @@ const colorTokens = [
   ["muted", "muted-foreground"],
   ["destructive", "background"],
   ["success", "background"],
-  ["warning", "foreground"],
+  ["warning", "warning-foreground"],
 ] as const
 
 const chartTokens = ["chart-1", "chart-2", "chart-3", "chart-4", "chart-5"]
@@ -103,14 +103,12 @@ export default function OverviewPage() {
             </div>
           ))}
         </div>
-        <div className="flex overflow-hidden rounded-xl border">
+        {/* labels sit under the swatches: no single text colour reads on all five fills */}
+        <div className="grid grid-cols-5 overflow-hidden rounded-xl border">
           {chartTokens.map((c) => (
-            <div
-              key={c}
-              className="grid h-14 flex-1 place-items-end p-2 font-mono text-[0.65rem] text-white"
-              style={{ background: `var(--${c})` }}
-            >
-              {c}
+            <div key={c} className="grid">
+              <div className="h-12" style={{ background: `var(--${c})` }} />
+              <span className="px-2 py-1.5 font-mono text-[0.65rem] text-muted-foreground">{c}</span>
             </div>
           ))}
         </div>
@@ -139,7 +137,7 @@ export default function OverviewPage() {
           {iconStyles.map(({ name, use, Icon }) => (
             <div
               key={name}
-              className="grid justify-items-center gap-2 rounded-xl border p-4 text-center data-[muted]:opacity-50"
+              className="grid justify-items-center gap-2 rounded-xl border p-4 text-center data-[muted]:[&>svg]:opacity-40"
               data-muted={use === "Don't use" || undefined}
             >
               <Icon className="size-8 text-primary" />

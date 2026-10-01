@@ -500,10 +500,16 @@ AppShell
 
 - Source of truth: this repo. `lib/catalog.ts` lists what ships; `pnpm registry:build` regenerates `registry.json` + `public/r/*.json` (dependencies are derived from imports).
 - To add a component: build it in `components/ui`, add an example region in `components/examples/index.tsx`, add it to `lib/catalog.ts`, document it in §5, run `pnpm registry:build`.
+- **Checks before merging** (all must pass):
+  - `pnpm lint` and `pnpm lint:a11y` — the full jsx-a11y recommended set as errors; deliberate exceptions live in `scripts/lint-a11y.mjs` with their reasons.
+  - `pnpm test:ui` — builds, then opens every gallery page (from `lib/catalog.ts`) in light/dark × desktop 1280/mobile 375 with the clock frozen at 1 ต.ค. 2569: axe WCAG 2.2 AA must report **zero serious/critical**, and each page must match its snapshot in `tests/ui/__snapshots__`. A new catalog entry is covered automatically.
+  - Intended visual change → `pnpm test:ui:update`, then review the new PNGs in the diff before committing.
+  - Snapshots are recorded on macOS with installed Chrome; a Linux CI needs its own baseline (run `test:ui:update` in the CI image once).
 - Breaking changes (token rename, API change) → bump the version at the top and add a changelog line.
 
 ## 10. Changelog
 
+- **0.5.1** (2026-10-01) — Quality gates: `pnpm test:ui` (Playwright + axe, 220 checks) and `pnpm lint:a11y`. Fixes they found: `--success` / `--destructive` darkened so text on their `/10` tint passes 4.5:1 (was 3.3 / 4.0); new `--warning-foreground`; code blocks use `github-light-high-contrast`; gallery logo link named on mobile; KPI sparklines no longer focusable inside `aria-hidden`; combobox example labelled; login "ลืมรหัสผ่าน" has a real href.
 - **0.5** (2026-10-01) — Data table toolbar: faceted multi-select filters with live counts (`?status=paid,shipped`), show/hide columns remembered per viewer (`useLocalStorage`), floating bulk-action bar (Esc clears), pagination with rows-per-page. `VirtualTable` (10,000 rows). Density: `--control-h` / `--table-*` tokens + compact mode in the account menu, applied before paint. New: `MultiSelect`, `Kbd`, `StatusBadge`, `FileDropzone`, `Stepper`, `Timeline`, KPI sparklines. Shortcuts: ⌘K, `/`, G→X, `?` help (physical keys, so they work on the Thai layout). Thai-first line-height scale; no `leading-none` on Thai. CVD-checked chart palette. Fix: ⌘K palette crashed on open (shadcn v4 `CommandDialog` needs an explicit `<Command>`).
 - **0.4.2** (2026-10-01) — Calendar: month slide animation (single-class keyframes in foundation CSS — react-day-picker toggles them with `classList`), month/year grid panel from the caption, "วันนี้" button; displayed month is now controlled inside Calendar (`month` / `onMonthChange` still work).
 - **0.4.1** (2026-10-01) — `DateInput` (typeable Thai dates via `parseThaiDate`); range hover preview with day count; `×` clear on DatePicker/DateRangePicker; `maxDays`, `disabledDays`, `captionLayout`, `startMonth`/`endMonth` on all pickers; ปีงบประมาณนี้ preset; two-month range view now ends on the current month; `toISODate` / `parseISODate`. Fix: Calendar remounted its grid on every render (inline `Root`/`Chevron`), which stole focus back to the previously focused day.
