@@ -104,7 +104,15 @@
 ## Phase 1.5: ปรับ date picker ✅ เสร็จ 2026-10-01 (v0.4.1)
 ไฮไลต์ช่วงตามเมาส์, ปุ่ม × ล้างค่า, `maxDays`/`disabledDays`/`captionLayout` ใช้ได้ทุกตัว, `toISODate`, `DateInput` ที่พิมพ์ได้, preset ปีงบประมาณ v0.4.2 เพิ่ม animation ตอนเปลี่ยนเดือน, ตารางเลือกเดือน/ปี และปุ่ม "วันนี้" ใน Calendar ยังไม่ได้ทำ: แสดงเป็น bottom sheet บนมือถือ, เทียบกับช่วงก่อนหน้า, DateTimePicker, วันหยุดราชการ
 
-## Phase 2: Data table toolbar และ component ที่ยังขาด
+## Phase 2: Data table toolbar และ component ที่ยังขาด ✅ เสร็จ 2026-10-01 (v0.5)
+
+**สิ่งที่ต่างจากแผนตอนลงมือ**
+- Pagination ทำเป็น `DataTablePagination` ใน `components/blocks/data-table/` แทน `components/ui/pagination.tsx` เพราะ `pagination` ของ shadcn คือ link nav คนละอย่างกัน
+- `@number-flow/react` ไม่ได้ใช้ เพราะตัวที่มีอยู่ทำงานดีแล้ว และพิสูจน์ด้วยตาไม่ได้ว่าดีกว่าชัดเจน (animation ไม่วิ่งใน pane ที่ถูกซ่อน)
+- G→X เขียน logic เอง เพราะ sequence หลายตัวใน `useHotkeys` เดียวใช้ buffer ร่วมกันจนรีเซ็ตทับกัน
+- เจอบั๊กเดิม: ⌘K palette พังทุกครั้งที่เปิด เพราะ shadcn v4 `CommandDialog` ไม่ได้ครอบ `<Command>` ให้
+- ตัวอักษรไทย: `text-*` ของ Tailwind ตั้ง line-height ทับ `:lang(th)` จึงต้องแก้ที่ type scale
+- ชุดสีกราฟ: ของเดิมมี 2 สีที่ contrast ไม่ถึง 3:1 ในโหมดสว่าง และแยกไม่ออกสำหรับคนตาบอดสีแดง-เขียว จึงหาค่าใหม่ด้วยการคำนวณ
 
 ### 2.1 Data table toolbar มาตรฐาน (ต่อยอดจาก OrdersTable)
 - **Faceted filter:** dropdown ที่เลือกได้หลายค่าพร้อมตัวนับ (ใช้ Popover + Command + Checkbox) มาแทน Select สถานะแบบเลือกได้ค่าเดียว

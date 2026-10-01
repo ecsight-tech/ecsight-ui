@@ -2,20 +2,24 @@
 
 import * as React from "react"
 import type { ColumnFiltersState, OnChangeFn, PaginationState, SortingState, Updater } from "@tanstack/react-table"
-import { debounce, parseAsIndex, parseAsInteger, parseAsString, useQueryStates } from "nuqs"
+import { debounce, parseAsArrayOf, parseAsIndex, parseAsInteger, parseAsString, useQueryStates } from "nuqs"
 
 import { parseAsSort, type SortValue } from "@/lib/search-params"
 
 type Options = {
   /** Column whose filter is the free-text search box → `?q=` */
   searchColumn?: string
-  /** Columns with a single string filter (e.g. a status select) → `?<column>=` */
+  /** Columns with a single string filter (e.g. a status select) → `?<column>=paid` */
   filterColumns?: string[]
+  /** Columns with a multi-select (faceted) filter → `?<column>=paid,shipped`; the filter value is a string[] */
+  facetColumns?: string[]
   defaultSort?: SortValue
   pageSize?: number
   /** Prefix every key when a page has more than one table, e.g. "orders_" */
   prefix?: string
 }
+
+type FilterValue = string | string[]
 
 const resolve = <T,>(updater: Updater<T>, old: T) =>
   typeof updater === "function" ? (updater as (old: T) => T)(old) : updater
@@ -32,6 +36,7 @@ const resolve = <T,>(updater: Updater<T>, old: T) =>
 export function useTableUrlState({
   searchColumn,
   filterColumns = [],
+  facetColumns = [],
   defaultSort,
   pageSize = 10,
   prefix = "",
@@ -43,8 +48,13 @@ export function useTableUrlState({
       page: parseAsIndex.withDefault(0),
       size: parseAsInteger.withDefault(pageSize),
       ...Object.fromEntries(filterColumns.map((c) => [c, parseAsString])),
+      ...Object.fromEntries(facetColumns.map((c) => [c, parseAsArrayOf(parseAsString)])),
     },
-    { urlKeys: Object.fromEntries(["q", "sort", "page", "size", ...filterColumns].map((k) => [k, prefix + k])) }
+    {
+      urlKeys: Object.fromEntries(
+        ["q", "sort", "page", "size", ...filterColumns, ...facetColumns].map((k) => [k, prefix + k])
+      ),
+    }
   )
 
   const sorting: SortingState = React.useMemo(() => (state.sort ? [state.sort] : []), [state.sort])
@@ -52,17 +62,23 @@ export function useTableUrlState({
     () => ({ pageIndex: state.page, pageSize: state.size }),
     [state.page, state.size]
   )
+
   // Rebuilt only when a filter value changes — a new array on every page change would
   // make TanStack think the filters changed and jump back to page 1.
-  const filterEntries: [string, string][] = []
+  const values = state as Record<string, unknown>
+  const filterEntries: [string, FilterValue][] = []
   if (searchColumn && state.q) filterEntries.push([searchColumn, state.q])
   for (const c of filterColumns) {
-    const v = (state as Record<string, unknown>)[c]
+    const v = values[c]
     if (typeof v === "string" && v) filterEntries.push([c, v])
+  }
+  for (const c of facetColumns) {
+    const v = values[c]
+    if (Array.isArray(v) && v.length) filterEntries.push([c, v as string[]])
   }
   const filterKey = JSON.stringify(filterEntries)
   const columnFilters: ColumnFiltersState = React.useMemo(
-    () => (JSON.parse(filterKey) as [string, string][]).map(([id, value]) => ({ id, value })),
+    () => (JSON.parse(filterKey) as [string, FilterValue][]).map(([id, value]) => ({ id, value })),
     [filterKey]
   )
 
@@ -81,16 +97,22 @@ export function useTableUrlState({
 
   const onColumnFiltersChange: OnChangeFn<ColumnFiltersState> = (updater) => {
     const next = resolve(updater, columnFilters)
-    const value = (id: string) => {
-      const v = next.find((f) => f.id === id)?.value
+    const find = (id: string) => next.find((f) => f.id === id)?.value
+    const text = (id: string) => {
+      const v = find(id)
       return typeof v === "string" && v ? v : null
     }
-    const q = searchColumn ? value(searchColumn) : null
+    const list = (id: string) => {
+      const v = find(id)
+      return Array.isArray(v) && v.length ? (v as string[]) : null
+    }
+    const q = searchColumn ? text(searchColumn) : null
     const typing = q !== (state.q || null)
     setState(
       {
         q,
-        ...Object.fromEntries(filterColumns.map((c) => [c, value(c)])),
+        ...Object.fromEntries(filterColumns.map((c) => [c, text(c)])),
+        ...Object.fromEntries(facetColumns.map((c) => [c, list(c)])),
         page: null, // any filter change starts from page 1
       },
       typing ? { limitUrlUpdates: debounce(300) } : undefined

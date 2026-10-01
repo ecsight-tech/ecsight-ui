@@ -24,6 +24,9 @@ import {
   DangerTriangleIcon,
   BellIcon,
   CopyIcon,
+  CardIcon,
+  DeliveryIcon,
+  BoxIcon,
 } from "@solar-icons/react/linear"
 import { HeartIcon as HeartBold, StarIcon as StarBold, BellIcon as BellBold } from "@solar-icons/react/bold"
 import { FolderOpenIcon } from "@solar-icons/react/bold-duotone"
@@ -91,6 +94,12 @@ import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Logo, LogoMark } from "@/components/ui/logo"
+import { FileDropzone, type UploadFn } from "@/components/ui/file-dropzone"
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
+import { MultiSelect } from "@/components/ui/multi-select"
+import { StatusBadge } from "@/components/ui/status-badge"
+import { Stepper } from "@/components/ui/stepper"
+import { Timeline } from "@/components/ui/timeline"
 import { Spinner } from "@/components/ui/spinner"
 import { Switch } from "@/components/ui/switch"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -313,6 +322,148 @@ export function FormExample() {
         บันทึก
       </Button>
     </form>
+  )
+}
+// #endregion
+
+// #region kbd
+export function KbdExample() {
+  return (
+    <div className="grid gap-3 text-sm">
+      <p className="flex items-center gap-2">
+        ค้นหาทุกอย่าง
+        <KbdGroup>
+          <Kbd>⌘</Kbd>
+          <Kbd>K</Kbd>
+        </KbdGroup>
+      </p>
+      <p className="flex items-center gap-2">
+        ไปที่คำสั่งซื้อ
+        <KbdGroup then>
+          <Kbd>G</Kbd>
+          <Kbd>O</Kbd>
+        </KbdGroup>
+      </p>
+      <p className="flex items-center gap-2">
+        ดูคีย์ลัดทั้งหมด <Kbd>?</Kbd>
+      </p>
+    </div>
+  )
+}
+// #endregion
+
+// #region status-badge
+export function StatusBadgeExample() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <StatusBadge tone="success">ชำระแล้ว</StatusBadge>
+      <StatusBadge tone="warning">รอชำระ</StatusBadge>
+      <StatusBadge tone="info" live>
+        กำลังจัดส่ง
+      </StatusBadge>
+      <StatusBadge tone="danger">ชำระไม่สำเร็จ</StatusBadge>
+      <StatusBadge tone="neutral">คืนเงิน</StatusBadge>
+    </div>
+  )
+}
+// #endregion
+
+// #region multi-select
+const branchOptions = [
+  { value: "bkk-silom", label: "สีลม", group: "กรุงเทพฯ" },
+  { value: "bkk-ari", label: "อารีย์", group: "กรุงเทพฯ" },
+  { value: "bkk-thonglor", label: "ทองหล่อ", group: "กรุงเทพฯ" },
+  { value: "bkk-bangna", label: "บางนา", group: "กรุงเทพฯ" },
+  { value: "cnx-nimman", label: "นิมมาน", group: "เชียงใหม่" },
+  { value: "cnx-oldcity", label: "คูเมือง", group: "เชียงใหม่" },
+  { value: "hkt-patong", label: "ป่าตอง", group: "ภูเก็ต" },
+  { value: "kkn-center", label: "ในเมือง", group: "ขอนแก่น" },
+]
+
+export function MultiSelectExample() {
+  const [branches, setBranches] = React.useState(["bkk-silom", "bkk-ari", "cnx-nimman"])
+  return (
+    <div className="grid w-full max-w-sm gap-2">
+      <Label htmlFor="ex-branches">สาขา</Label>
+      <MultiSelect id="ex-branches" options={branchOptions} value={branches} onChange={setBranches} placeholder="เลือกสาขา" />
+    </div>
+  )
+}
+// #endregion
+
+// #region file-dropzone
+// Demo upload: ticks progress; any file with "error" in its name fails (try retry)
+const fakeUpload: UploadFn = (file, onProgress) =>
+  new Promise((resolve, reject) => {
+    let p = 0
+    const id = setInterval(() => {
+      p += 12 + Math.random() * 18
+      onProgress(p)
+      if (p >= 60 && file.name.includes("error")) {
+        clearInterval(id)
+        reject(new Error("การเชื่อมต่อขาดหาย ลองใหม่อีกครั้ง"))
+      } else if (p >= 100) {
+        clearInterval(id)
+        resolve()
+      }
+    }, 200)
+  })
+
+export function FileDropzoneExample() {
+  return (
+    <FileDropzone
+      className="w-full max-w-md"
+      onUpload={fakeUpload}
+      accept={{ "image/*": [], "application/pdf": [".pdf"] }}
+      maxSize={5 * 1024 * 1024}
+      maxFiles={5}
+      hint="รูปภาพหรือ PDF ไม่เกิน 5 MB · สูงสุด 5 ไฟล์"
+    />
+  )
+}
+// #endregion
+
+// #region stepper
+const importSteps = [
+  { title: "อัปโหลดไฟล์", description: "CSV หรือ Excel" },
+  { title: "จับคู่คอลัมน์", description: "ชื่อ อีเมล เบอร์โทร" },
+  { title: "ตรวจสอบ", description: "แก้ข้อมูลที่ผิด" },
+  { title: "นำเข้า" },
+]
+
+export function StepperExample() {
+  const [step, setStep] = React.useState(1)
+  return (
+    <div className="grid w-full max-w-2xl gap-6">
+      <Stepper steps={importSteps} current={step} onStepClick={setStep} />
+      <div className="flex justify-between">
+        <Button variant="outline" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>
+          ย้อนกลับ
+        </Button>
+        <Button onClick={() => setStep((s) => Math.min(s + 1, importSteps.length))}>
+          {step >= importSteps.length - 1 ? "นำเข้า" : "ถัดไป"}
+        </Button>
+      </div>
+    </div>
+  )
+}
+// #endregion
+
+// #region timeline
+export function TimelineExample() {
+  const now = new Date()
+  const ago = (minutes: number) => new Date(now.getTime() - minutes * 60_000)
+  return (
+    <Timeline
+      className="w-full max-w-md"
+      now={now}
+      items={[
+        { id: "4", title: "จัดส่งแล้ว", description: "Kerry Express · TH0123456789", time: ago(12), icon: <DeliveryIcon />, tone: "info" },
+        { id: "3", title: "แพ็กสินค้า", description: "คลังบางนา", time: ago(95), icon: <BoxIcon />, tone: "neutral" },
+        { id: "2", title: "ชำระเงินแล้ว", description: "PromptPay ฿3,920", time: ago(60 * 26), icon: <CardIcon />, tone: "success" },
+        { id: "1", title: "สร้างคำสั่งซื้อ", description: "ผ่าน LINE OA", time: ago(60 * 27) },
+      ]}
+    />
   )
 }
 // #endregion
@@ -1051,6 +1202,12 @@ export const examples: Record<string, React.ComponentType> = {
   sidebar: SidebarExample,
   icon: IconExample,
   logo: LogoExample,
+  kbd: KbdExample,
+  "status-badge": StatusBadgeExample,
+  "multi-select": MultiSelectExample,
+  "file-dropzone": FileDropzoneExample,
+  stepper: StepperExample,
+  timeline: TimelineExample,
   calendar: CalendarExample,
   "date-picker": DatePickerExample,
   form: FormExample,

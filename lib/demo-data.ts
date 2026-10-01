@@ -53,6 +53,22 @@ export const orders: Order[] = Array.from({ length: 60 }, (_, i) => {
   }
 })
 
+/** Deterministic bulk sample (e.g. 10,000 rows for the virtualized table) — same shape as `orders` */
+export function makeOrders(count: number): Order[] {
+  return Array.from({ length: count }, (_, i) => {
+    const [customer, email] = customers[(i * 7) % customers.length]
+    return {
+      id: `ORD-${String(100001 + i)}`,
+      customer,
+      email,
+      status: statuses[(i * 5) % statuses.length],
+      channel: channels[(i * 3) % channels.length],
+      amount: Math.round((((i * 7919) % 12000) + 120) / 10) * 10,
+      date: daysAgo((i * 13) % 365),
+    }
+  })
+}
+
 export const statusLabel: Record<OrderStatus, string> = {
   paid: "ชำระแล้ว",
   pending: "รอชำระ",
@@ -61,11 +77,11 @@ export const statusLabel: Record<OrderStatus, string> = {
 }
 
 export const kpis = [
-  { key: "revenue", label: "รายได้เดือนนี้", value: 1284500, delta: 12.4, format: { style: "currency", currency: "THB", maximumFractionDigits: 0 } },
-  { key: "orders", label: "คำสั่งซื้อ", value: 3421, delta: 8.1, format: {} },
-  { key: "customers", label: "ลูกค้าใหม่", value: 482, delta: -3.2, format: {} },
-  { key: "aov", label: "ยอดเฉลี่ยต่อออเดอร์", value: 375.4, delta: 4.6, format: { style: "currency", currency: "THB", maximumFractionDigits: 0 } },
-] as const satisfies ReadonlyArray<{ key: string; label: string; value: number; delta: number; format: Intl.NumberFormatOptions }>
+  { key: "revenue", label: "รายได้เดือนนี้", value: 1284500, delta: 12.4, format: { style: "currency", currency: "THB", maximumFractionDigits: 0 }, trend: [38, 41, 39, 44, 47, 45, 52, 55, 53, 58, 61, 64] },
+  { key: "orders", label: "คำสั่งซื้อ", value: 3421, delta: 8.1, format: {}, trend: [210, 230, 225, 260, 255, 270, 290, 285, 300, 310, 305, 330] },
+  { key: "customers", label: "ลูกค้าใหม่", value: 482, delta: -3.2, format: {}, trend: [52, 49, 51, 47, 45, 46, 43, 44, 41, 42, 40, 39] },
+  { key: "aov", label: "ยอดเฉลี่ยต่อออเดอร์", value: 375.4, delta: 4.6, format: { style: "currency", currency: "THB", maximumFractionDigits: 0 }, trend: [350, 355, 352, 360, 358, 362, 365, 361, 368, 370, 372, 375] },
+] as const satisfies ReadonlyArray<{ key: string; label: string; value: number; delta: number; format: Intl.NumberFormatOptions; trend: readonly number[] }>
 
 export const revenueSeries = Array.from({ length: 90 }, (_, i) => {
   const base = 32000 + Math.sin(i / 3) * 6000 + i * 140

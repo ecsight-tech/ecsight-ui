@@ -138,6 +138,8 @@ Every brand-tinted token (`primary`, `accent`, `ring`, `chart-1`, sidebar, neutr
 
 Status badges always use the **tinted** pattern: `bg-<status>/10 text-<status> border-transparent` (warning uses `/15` + `text-foreground` for contrast).
 
+**Charts** — `--chart-1…5` = blue (brand) · rust · teal · plum · slate. Use them **in order**, max 5 series; fold the rest into "อื่น ๆ" on `chart-5`. Each colour is ≥ 3:1 against the card in both themes, and every pair stays distinguishable for red–green colour blindness (min ΔEok ≈ 11 light / 14 dark, simulated) — the palette leans on lightness steps, so don't swap in lookalike hues. Still label series directly or with a legend; never rely on colour alone.
+
 ### 3.3 Typography
 
 | Role | Class | Notes |
@@ -151,7 +153,8 @@ Status badges always use the **tinted** pattern: `bg-<status>/10 text-<status> b
 | Code / IDs | `font-mono text-xs` | Order IDs, keys |
 
 - Fonts: **IBM Plex Sans** (Latin) → **IBM Plex Sans Thai Looped** (Thai, looped = with heads, legible at small sizes) → **IBM Plex Mono** (`font-mono`). Stack: `--font-sans: var(--font-plex-sans), var(--font-plex-thai), …`.
-- Thai line-height: `:lang(th) { line-height: 1.65 }` is global. **MUST NOT** use `leading-none` / `leading-tight` on Thai text (clips vowels and tone marks: ปี่ ญ ฎ ฏ ฐ ฤๅ).
+- Thai line-height is built into the type scale (`--text-*--line-height` in `@theme`): xs 1.5 · sm 1.6 · base 1.65 · lg 1.6 · xl 1.5 · 2xl 1.45 · 3xl 1.35. Tailwind's `text-*` classes set line-height per element (overriding `:lang(th)`), so the scale itself carries it. Measured in Plex Thai Looped: typical Thai ink ≈ 0.94em, worst case (ปี่ ฏุ๊) ≈ 1.70em.
+- **MUST NOT** use `leading-none` / `leading-tight` on anything that can hold Thai — stacked vowels/tone marks overlap the next line. `leading-snug` is the tightest allowed (single-line labels, titles).
 - **MUST NOT** use negative tracking on Thai body text; `tracking-tight` is allowed on headings only.
 - Numbers that are compared (tables, KPIs, money) **MUST** be `tabular-nums` (automatic inside `Table` and `[data-numeric]`).
 
@@ -160,11 +163,14 @@ Status badges always use the **tinted** pattern: `bg-<status>/10 text-<status> b
 | Token | Value | Use |
 |---|---|---|
 | `--radius` | `0.625rem` (10px) | Base. `rounded-lg` = 10px (controls), `rounded-xl` = 14px (cards), `rounded-md` = 8px (menu items) |
-| Control height | `h-9` (36px) default · `h-8` sm · `h-10` lg | Buttons, inputs, selects, tabs |
-| Icon button | `size-9` · `icon-sm` = 32px | Toolbars, row actions use `icon-sm` |
+| Control height | `h-(--control-h)` = 36px default (32px compact) · `h-8` sm · `h-10` lg | Buttons, inputs, selects, input groups, tabs. Custom controls must use the token, not `h-9` |
+| Icon button | `size-(--control-h)` · `icon-sm` = 32px | Toolbars, row actions use `icon-sm` |
+| Table rows | `--table-head-h` 40px (36) · `--table-cell-py` 8px (4) | Built into `TableHead` / `TableCell` |
 | Page padding | `p-4 md:p-6` | Inside `AppShell` |
 | Section gap | `gap-4 md:gap-6` | Between page sections/cards |
 | Form field gap | `gap-2` (label→field) · `gap-5` (field→field) | |
+
+**Density** is a per-viewer preference: `useDensity()` (hooks/use-density.ts) stores it and sets `data-density="compact"` on `<html>`, which swaps the three tokens above. The account menu in `AppShell` has the switch (สบายตา / กระชับ). Add `densityScript` to `<head>` in the root layout so it applies before first paint.
 
 ### 3.5 Motion
 
@@ -390,6 +396,12 @@ Never show a toast for something the user can already see changed in place.
 |---|---|
 | `Icon` | Consistent animated Linear→Bold swaps |
 | `Logo` / `LogoMark` | Brand mark, `currentColor` |
+| `StatusBadge` | Record status: dot + label, tones `success · warning · info · danger · neutral`; `live` pulses for in-progress states. Map domain states → tones once, next to the data. Use instead of hand-tinted `Badge`s |
+| `MultiSelect` | Several values from a list (tags, branches, assignees) — chips, search, groups, select all/clear. ≤ 5 always-visible options → checkboxes instead |
+| `FileDropzone` | Uploads: drag/drop/click/paste, per-file progress, error + retry, rejection reasons in Thai. Pass `onUpload(file, onProgress)` |
+| `Stepper` | Multi-step flows (import, onboarding). Only completed steps are clickable |
+| `Timeline` | Activity feeds / record history with relative Thai time |
+| `Kbd` / `KbdGroup` | Shortcut hints; `then` for sequences (G แล้ว O) |
 | `Spinner` | Solar has no loader glyph |
 | `AnimatedNumber` | KPI counters with `th-TH` formatting |
 | `EmptyState` | Standard empty/zero-result pattern with staggered entrance |
@@ -430,9 +442,12 @@ AppShell
 ### 6.5 Tables
 
 - ≥ 20 rows → paginate (8–25 per page) or virtualize. Default sort is newest first.
-- Search filters on name/email/ID at minimum; status filter as Select.
-- Bulk actions appear only when rows are selected ("เลือก 3 รายการ" animates in).
-- **View state lives in the URL** via nuqs: `useTableUrlState({ searchColumn, filterColumns, defaultSort, pageSize })` returns TanStack-ready `sorting` / `columnFilters` / `pagination` + handlers (`?q=&status=&sort=date.desc&page=2`). Defaults stay out of the URL; search updates it after 300 ms with `replace`; paging forward `push`es (Back = previous page). Row selection stays local. Page-level filters (date range) use `useQueryStates` with `parseAsLocalDate` from `lib/search-params.ts` — never nuqs' `parseAsIsoDate`, which shifts dates by a day in UTC+7.
+- **Toolbar** (left → right): search (name/email/ID at minimum) · one `DataTableFacetedFilter` per categorical column (multi-select with live counts; column `filterFn: facetFilterFn`, table `getFacetedRowModel()` + `getFacetedUniqueValues()`) · "ล้างตัวกรอง" when anything is filtered · right side: `DataTableViewOptions` (show/hide columns via `meta.label`; persist `columnVisibility` with `useLocalStorage`) and export.
+- **Bulk actions** live in `DataTableBulkBar` — floats up from the bottom only while rows are selected ("เลือก 3 รายการ", ≤ 3 actions, ✕ / Esc clears). Never put bulk actions in the toolbar.
+- **Footer** is `DataTablePagination`: "แสดง 9–16 จาก 60 รายการ" (or the selection count), rows per page (8/20/50), first/prev/next/last.
+- Pieces live in `components/blocks/data-table/`; `OrdersTable` is the reference composition.
+- **Thousands of rows to scan** → `VirtualTable` (only visible rows render, sticky header, fixed 40px rows, no row animation). Filtering + bulk actions on a page of results → the Data Table.
+- **View state lives in the URL** via nuqs: `useTableUrlState({ searchColumn, filterColumns, facetColumns, defaultSort, pageSize })` returns TanStack-ready `sorting` / `columnFilters` / `pagination` + handlers (`?q=&status=paid,shipped&sort=date.desc&page=2`; `facetColumns` hold string[]). Defaults stay out of the URL; search updates it after 300 ms with `replace`; paging forward `push`es (Back = previous page). Row selection stays local. Page-level filters (date range) use `useQueryStates` with `parseAsLocalDate` from `lib/search-params.ts` — never nuqs' `parseAsIsoDate`, which shifts dates by a day in UTC+7.
 - Anything that reads the URL must sit inside `<Suspense>` on prerendered pages. Memoise filtered data on primitive keys (e.g. `date.getTime()`), not on the Date objects nuqs returns, or the table will keep resetting to page 1.
 
 ### 6.6 Responsive
@@ -489,6 +504,7 @@ AppShell
 
 ## 10. Changelog
 
+- **0.5** (2026-10-01) — Data table toolbar: faceted multi-select filters with live counts (`?status=paid,shipped`), show/hide columns remembered per viewer (`useLocalStorage`), floating bulk-action bar (Esc clears), pagination with rows-per-page. `VirtualTable` (10,000 rows). Density: `--control-h` / `--table-*` tokens + compact mode in the account menu, applied before paint. New: `MultiSelect`, `Kbd`, `StatusBadge`, `FileDropzone`, `Stepper`, `Timeline`, KPI sparklines. Shortcuts: ⌘K, `/`, G→X, `?` help (physical keys, so they work on the Thai layout). Thai-first line-height scale; no `leading-none` on Thai. CVD-checked chart palette. Fix: ⌘K palette crashed on open (shadcn v4 `CommandDialog` needs an explicit `<Command>`).
 - **0.4.2** (2026-10-01) — Calendar: month slide animation (single-class keyframes in foundation CSS — react-day-picker toggles them with `classList`), month/year grid panel from the caption, "วันนี้" button; displayed month is now controlled inside Calendar (`month` / `onMonthChange` still work).
 - **0.4.1** (2026-10-01) — `DateInput` (typeable Thai dates via `parseThaiDate`); range hover preview with day count; `×` clear on DatePicker/DateRangePicker; `maxDays`, `disabledDays`, `captionLayout`, `startMonth`/`endMonth` on all pickers; ปีงบประมาณนี้ preset; two-month range view now ends on the current month; `toISODate` / `parseISODate`. Fix: Calendar remounted its grid on every render (inline `Root`/`Chevron`), which stole focus back to the previously focused day.
 - **0.4** (2026-10-01) — Calendar (react-day-picker v10, พ.ศ. via `@daypicker/buddhist`), DatePicker + DateRangePicker with presets; `lib/format.ts`; `FormField` (react-hook-form + zod) + Thai validators in `lib/validation.ts`; CustomerSheet rebuilt with async email check and server-error state; Data Table keeps search/filter/sort/page in the URL (nuqs, `useTableUrlState`); `NuqsAdapter` added to foundation; demo dashboard gets a URL-backed date range over 90 days of sample data.

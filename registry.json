@@ -42,7 +42,14 @@
           "color-warning": "var(--warning)",
           "ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
           "ease-in": "cubic-bezier(0.4, 0, 1, 1)",
-          "ease-spring": "linear(0, 0.041, 0.142, 0.273, 0.412, 0.547, 0.669, 0.772, 0.856, 0.921, 0.969, 1.002, 1.023, 1.035, 1.04, 1.04, 1.037, 1.032, 1.026, 1.021, 1.016, 1.011, 1.007, 1.004, 1)"
+          "ease-spring": "linear(0, 0.041, 0.142, 0.273, 0.412, 0.547, 0.669, 0.772, 0.856, 0.921, 0.969, 1.002, 1.023, 1.035, 1.04, 1.04, 1.037, 1.032, 1.026, 1.021, 1.016, 1.011, 1.007, 1.004, 1)",
+          "text-xs--line-height": "1.5",
+          "text-sm--line-height": "1.6",
+          "text-base--line-height": "1.65",
+          "text-lg--line-height": "1.6",
+          "text-xl--line-height": "1.5",
+          "text-2xl--line-height": "1.45",
+          "text-3xl--line-height": "1.35"
         },
         "light": {
           "brand-h": "262.6",
@@ -53,6 +60,9 @@
           "motion-slow": "260ms",
           "motion-spring": "320ms",
           "radius": "0.625rem",
+          "control-h": "2.25rem",
+          "table-head-h": "2.5rem",
+          "table-cell-py": "0.5rem",
           "background": "oklch(1 0 0)",
           "foreground": "oklch(0.16 0.01 var(--brand-h))",
           "card": "oklch(1 0 0)",
@@ -74,10 +84,10 @@
           "input": "oklch(0.9 0.008 var(--brand-h))",
           "ring": "oklch(0.535 var(--brand-c) var(--brand-h) / 60%)",
           "chart-1": "var(--brand)",
-          "chart-2": "oklch(0.7 0.13 calc(var(--brand-h) - 60))",
-          "chart-3": "oklch(0.65 0.15 calc(var(--brand-h) + 60))",
-          "chart-4": "oklch(0.78 0.12 calc(var(--brand-h) - 180))",
-          "chart-5": "oklch(0.6 0.04 var(--brand-h))",
+          "chart-2": "oklch(0.44 0.16 50)",
+          "chart-3": "oklch(0.64 0.08 190)",
+          "chart-4": "oklch(0.4 0.15 350)",
+          "chart-5": "oklch(0.52 0.03 var(--brand-h))",
           "sidebar": "oklch(0.985 0.003 var(--brand-h))",
           "sidebar-foreground": "var(--foreground)",
           "sidebar-primary": "var(--primary)",
@@ -109,10 +119,10 @@
           "input": "oklch(1 0 0 / 15%)",
           "ring": "oklch(0.66 0.18 var(--brand-h) / 60%)",
           "chart-1": "oklch(0.66 0.18 var(--brand-h))",
-          "chart-2": "oklch(0.75 0.13 calc(var(--brand-h) - 60))",
-          "chart-3": "oklch(0.7 0.15 calc(var(--brand-h) + 60))",
-          "chart-4": "oklch(0.82 0.12 calc(var(--brand-h) - 180))",
-          "chart-5": "oklch(0.55 0.04 var(--brand-h))",
+          "chart-2": "oklch(0.56 0.16 50)",
+          "chart-3": "oklch(0.84 0.08 190)",
+          "chart-4": "oklch(0.52 0.15 350)",
+          "chart-5": "oklch(0.68 0.03 var(--brand-h))",
           "sidebar": "oklch(0.17 0.009 var(--brand-h))",
           "sidebar-foreground": "var(--foreground)",
           "sidebar-primary": "var(--primary)",
@@ -127,6 +137,11 @@
         "@layer base": {
           ":lang(th)": {
             "line-height": "1.65"
+          },
+          "[data-density=\"compact\"]": {
+            "--control-h": "2rem",
+            "--table-head-h": "2.25rem",
+            "--table-cell-py": "0.25rem"
           },
           "[data-slot=\"table\"], [data-numeric]": {
             "font-variant-numeric": "tabular-nums"
@@ -1067,6 +1082,134 @@
       ]
     },
     {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Keyboard keys and shortcuts (⌘K, G แล้ว O).",
+      "dependencies": [
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/kbd.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "status-badge",
+      "type": "registry:ui",
+      "title": "Status Badge",
+      "description": "Record status: dot + label, 5 tones; `live` pulses for in-progress states. Motion: `live` dot pings (off with reduced motion).",
+      "dependencies": [
+        "class-variance-authority",
+        "cn"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/status-badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "multi-select",
+      "type": "registry:ui",
+      "title": "Multi Select",
+      "description": "Pick several values; chips in the trigger, search, groups, select all / clear. Motion: Chips pop in/out and reflow (layout).",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/badge",
+        "@ecsight/button",
+        "@ecsight/combobox",
+        "@ecsight/foundation",
+        "@ecsight/popover"
+      ],
+      "files": [
+        {
+          "path": "components/ui/multi-select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "file-dropzone",
+      "type": "registry:ui",
+      "title": "File Dropzone",
+      "description": "Drag/drop/paste upload with per-file progress, errors, retry and rejection reasons. Motion: Icon lifts on drag-over; rows slide in.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "motion",
+        "react-dropzone"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/foundation",
+        "@ecsight/progress"
+      ],
+      "files": [
+        {
+          "path": "components/ui/file-dropzone.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "title": "Stepper",
+      "description": "Progress through a multi-step flow; jump back to completed steps. Motion: Connector fills on a spring; check pops in.",
+      "dependencies": [
+        "@solar-icons/react",
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/ui/stepper.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "Activity feed / order history with relative Thai time. Motion: Items stagger in.",
+      "dependencies": [
+        "cn",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@ecsight/foundation",
+        "@ecsight/status-badge"
+      ],
+      "files": [
+        {
+          "path": "components/ui/timeline.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "lib/format.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "spinner",
       "type": "registry:ui",
       "title": "Spinner",
@@ -1150,7 +1293,8 @@
       "dependencies": [
         "@solar-icons/react",
         "motion",
-        "next-themes"
+        "next-themes",
+        "react-hotkeys-hook"
       ],
       "registryDependencies": [
         "@ecsight/avatar",
@@ -1158,9 +1302,11 @@
         "@ecsight/button",
         "@ecsight/combobox",
         "@ecsight/count-badge",
+        "@ecsight/dialog",
         "@ecsight/dropdown-menu",
         "@ecsight/foundation",
         "@ecsight/icon",
+        "@ecsight/kbd",
         "@ecsight/logo",
         "@ecsight/separator",
         "@ecsight/sidebar",
@@ -1170,6 +1316,14 @@
         {
           "path": "components/blocks/app-shell.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "hooks/use-density.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "hooks/use-local-storage.ts",
+          "type": "registry:hook"
         }
       ]
     },
@@ -1181,7 +1335,8 @@
       "dependencies": [
         "@solar-icons/react",
         "cn",
-        "motion"
+        "motion",
+        "recharts"
       ],
       "registryDependencies": [
         "@ecsight/animated-number",
@@ -1220,7 +1375,7 @@
       "name": "orders-table",
       "type": "registry:block",
       "title": "Data Table",
-      "description": "Search, filter, sort, select, paginate, empty state — view state in the URL. Motion: Rows animate in/out with layout transitions.",
+      "description": "Search, faceted filters with counts, sort, show/hide columns, bulk-action bar, pagination — view state in the URL. Motion: Rows animate in/out with layout transitions.",
       "dependencies": [
         "@solar-icons/react",
         "@tanstack/react-table",
@@ -1235,11 +1390,16 @@
         "@ecsight/button",
         "@ecsight/card",
         "@ecsight/checkbox",
+        "@ecsight/combobox",
         "@ecsight/dropdown-menu",
         "@ecsight/empty-state",
         "@ecsight/foundation",
         "@ecsight/input-group",
+        "@ecsight/kbd",
+        "@ecsight/popover",
         "@ecsight/select",
+        "@ecsight/separator",
+        "@ecsight/status-badge",
         "@ecsight/table"
       ],
       "files": [
@@ -1248,8 +1408,28 @@
           "type": "registry:component"
         },
         {
+          "path": "components/blocks/data-table/data-table-faceted-filter.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/blocks/data-table/data-table-view-options.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/blocks/data-table/data-table-pagination.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "components/blocks/data-table/data-table-bulk-bar.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "lib/demo-data.ts",
           "type": "registry:lib"
+        },
+        {
+          "path": "hooks/use-local-storage.ts",
+          "type": "registry:hook"
         },
         {
           "path": "hooks/use-table-url-state.ts",
@@ -1261,6 +1441,38 @@
         },
         {
           "path": "lib/search-params.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "virtual-table",
+      "type": "registry:block",
+      "title": "Virtual Table",
+      "description": "10,000 rows, sticky header, sort — only visible rows render. Motion: None on rows by design — animation fights virtualization.",
+      "dependencies": [
+        "@solar-icons/react",
+        "@tanstack/react-table",
+        "@tanstack/react-virtual",
+        "cn",
+        "date-fns"
+      ],
+      "registryDependencies": [
+        "@ecsight/button",
+        "@ecsight/card",
+        "@ecsight/foundation"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/virtual-table.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "lib/demo-data.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "lib/format.ts",
           "type": "registry:lib"
         }
       ]

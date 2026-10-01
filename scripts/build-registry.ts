@@ -95,7 +95,18 @@ function cssBlock(css: string, selector: string) {
 
 const css = read("app/globals.css")
 const themeInline = cssBlock(css, "@theme inline")
-const ecsightThemeKeys = ["font-sans", "font-mono", "color-brand", "color-success", "color-warning", "ease-out", "ease-in", "ease-spring"]
+const ecsightThemeKeys = [
+  "font-sans",
+  "font-mono",
+  "color-brand",
+  "color-success",
+  "color-warning",
+  "ease-out",
+  "ease-in",
+  "ease-spring",
+  // Thai-first line heights (see app/globals.css)
+  ...["xs", "sm", "base", "lg", "xl", "2xl", "3xl"].map((s) => `text-${s}--line-height`),
+]
 
 const fonts = [
   { name: "font-plex-sans", family: "IBM Plex Sans", import: "IBM_Plex_Sans", variable: "--font-plex-sans", subsets: ["latin"], weight: ["400", "500", "600", "700"] },
@@ -123,6 +134,7 @@ const foundation = {
   css: {
     "@layer base": {
       ":lang(th)": { "line-height": "1.65" },
+      '[data-density="compact"]': { "--control-h": "2rem", "--table-head-h": "2.25rem", "--table-cell-py": "0.25rem" },
       '[data-slot="table"], [data-numeric]': { "font-variant-numeric": "tabular-nums" },
     },
     "@layer components": {

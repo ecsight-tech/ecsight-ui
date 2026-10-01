@@ -39,7 +39,14 @@
       "color-warning": "var(--warning)",
       "ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
       "ease-in": "cubic-bezier(0.4, 0, 1, 1)",
-      "ease-spring": "linear(0, 0.041, 0.142, 0.273, 0.412, 0.547, 0.669, 0.772, 0.856, 0.921, 0.969, 1.002, 1.023, 1.035, 1.04, 1.04, 1.037, 1.032, 1.026, 1.021, 1.016, 1.011, 1.007, 1.004, 1)"
+      "ease-spring": "linear(0, 0.041, 0.142, 0.273, 0.412, 0.547, 0.669, 0.772, 0.856, 0.921, 0.969, 1.002, 1.023, 1.035, 1.04, 1.04, 1.037, 1.032, 1.026, 1.021, 1.016, 1.011, 1.007, 1.004, 1)",
+      "text-xs--line-height": "1.5",
+      "text-sm--line-height": "1.6",
+      "text-base--line-height": "1.65",
+      "text-lg--line-height": "1.6",
+      "text-xl--line-height": "1.5",
+      "text-2xl--line-height": "1.45",
+      "text-3xl--line-height": "1.35"
     },
     "light": {
       "brand-h": "262.6",
@@ -50,6 +57,9 @@
       "motion-slow": "260ms",
       "motion-spring": "320ms",
       "radius": "0.625rem",
+      "control-h": "2.25rem",
+      "table-head-h": "2.5rem",
+      "table-cell-py": "0.5rem",
       "background": "oklch(1 0 0)",
       "foreground": "oklch(0.16 0.01 var(--brand-h))",
       "card": "oklch(1 0 0)",
@@ -71,10 +81,10 @@
       "input": "oklch(0.9 0.008 var(--brand-h))",
       "ring": "oklch(0.535 var(--brand-c) var(--brand-h) / 60%)",
       "chart-1": "var(--brand)",
-      "chart-2": "oklch(0.7 0.13 calc(var(--brand-h) - 60))",
-      "chart-3": "oklch(0.65 0.15 calc(var(--brand-h) + 60))",
-      "chart-4": "oklch(0.78 0.12 calc(var(--brand-h) - 180))",
-      "chart-5": "oklch(0.6 0.04 var(--brand-h))",
+      "chart-2": "oklch(0.44 0.16 50)",
+      "chart-3": "oklch(0.64 0.08 190)",
+      "chart-4": "oklch(0.4 0.15 350)",
+      "chart-5": "oklch(0.52 0.03 var(--brand-h))",
       "sidebar": "oklch(0.985 0.003 var(--brand-h))",
       "sidebar-foreground": "var(--foreground)",
       "sidebar-primary": "var(--primary)",
@@ -106,10 +116,10 @@
       "input": "oklch(1 0 0 / 15%)",
       "ring": "oklch(0.66 0.18 var(--brand-h) / 60%)",
       "chart-1": "oklch(0.66 0.18 var(--brand-h))",
-      "chart-2": "oklch(0.75 0.13 calc(var(--brand-h) - 60))",
-      "chart-3": "oklch(0.7 0.15 calc(var(--brand-h) + 60))",
-      "chart-4": "oklch(0.82 0.12 calc(var(--brand-h) - 180))",
-      "chart-5": "oklch(0.55 0.04 var(--brand-h))",
+      "chart-2": "oklch(0.56 0.16 50)",
+      "chart-3": "oklch(0.84 0.08 190)",
+      "chart-4": "oklch(0.52 0.15 350)",
+      "chart-5": "oklch(0.68 0.03 var(--brand-h))",
       "sidebar": "oklch(0.17 0.009 var(--brand-h))",
       "sidebar-foreground": "var(--foreground)",
       "sidebar-primary": "var(--primary)",
@@ -124,6 +134,11 @@
     "@layer base": {
       ":lang(th)": {
         "line-height": "1.65"
+      },
+      "[data-density=\"compact\"]": {
+        "--control-h": "2rem",
+        "--table-head-h": "2.25rem",
+        "--table-cell-py": "0.25rem"
       },
       "[data-slot=\"table\"], [data-numeric]": {
         "font-variant-numeric": "tabular-nums"

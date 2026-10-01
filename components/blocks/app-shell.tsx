@@ -3,11 +3,13 @@
 import * as React from "react"
 import { motion } from "motion/react"
 import { useTheme } from "next-themes"
+import { useHotkeys } from "react-hotkeys-hook"
 import {
   BellIcon,
   BoxIcon,
   CartLarge2Icon,
   Chart2Icon,
+  KeyboardIcon,
   Logout2Icon,
   MagnifierIcon,
   MoonIcon,
@@ -27,6 +29,7 @@ import {
   Widget5Icon as Widget5Bold,
 } from "@solar-icons/react/bold"
 
+import { useDensity, type Density } from "@/hooks/use-density"
 import { spring } from "@/lib/motion"
 import { Icon, type SolarIcon } from "@/components/ui/icon"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -40,6 +43,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -53,6 +57,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -76,6 +82,8 @@ import {
 } from "@/components/ui/sidebar"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { LogoMark } from "@/components/ui/logo"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
 
 export type NavItem = {
   key: string
@@ -93,9 +101,113 @@ export const defaultNav: NavItem[] = [
   { key: "reports", label: "รายงาน", icon: Chart2Icon, activeIcon: Chart2Bold },
 ]
 
-const secondaryNav: NavItem[] = [
-  { key: "settings", label: "ตั้งค่า", icon: SettingsIcon, activeIcon: SettingsBold },
-]
+const secondaryNav: NavItem[] = [{ key: "settings", label: "ตั้งค่า", icon: SettingsIcon, activeIcon: SettingsBold }]
+
+/** "G then <key>" jumps to a page — Linear/GitHub style. Keys are nav item keys. */
+const goKeys: Record<string, string> = {
+  overview: "d",
+  orders: "o",
+  customers: "c",
+  products: "p",
+  reports: "r",
+  settings: "s",
+}
+
+/**
+ * App-wide shortcuts. Off while typing in a field (except ⌘K):
+ * ⌘K palette · / focus the page's search (`data-shortcut="search"`) · G→X go to page · ? help.
+ */
+function useAppShortcuts({
+  onNavigate,
+  togglePalette,
+  openHelp,
+}: {
+  onNavigate: (key: string) => void
+  togglePalette: () => void
+  openHelp: () => void
+}) {
+  useHotkeys("mod+k", togglePalette, { preventDefault: true, enableOnFormTags: true }, [togglePalette])
+  useHotkeys(
+    "slash",
+    () => {
+      const search = document.querySelector<HTMLElement>("[data-shortcut=search]")
+      if (search) search.focus()
+      else togglePalette()
+    },
+    { preventDefault: true },
+    [togglePalette],
+  )
+  // "G then X": the library's `g>o` sequences share one buffer per hook and reset each
+  // other, so track G ourselves. Physical keys (event.code) → also works on the Thai layout.
+  const gPressedAt = React.useRef(0)
+  useHotkeys("g", () => (gPressedAt.current = Date.now()))
+  useHotkeys(
+    Object.values(goKeys).join(","),
+    (_, handler) => {
+      if (Date.now() - gPressedAt.current > 1000) return
+      gPressedAt.current = 0
+      const page = Object.keys(goKeys).find((p) => goKeys[p] === handler.hotkey)
+      if (page) onNavigate(page)
+    },
+    [onNavigate]
+  )
+  useHotkeys("shift+slash", openHelp, [openHelp])
+}
+
+/** Every shortcut in one place — opened with ? */
+function ShortcutsDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+  const pages = [...defaultNav, ...secondaryNav].filter((i) => goKeys[i.key])
+  const row = (label: string, keys: React.ReactNode) => (
+    <div key={label} className="flex items-center justify-between gap-4 py-1.5 text-sm">
+      <span>{label}</span>
+      {keys}
+    </div>
+  )
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>คีย์ลัด</DialogTitle>
+          <DialogDescription>ใช้ได้ทุกหน้า ยกเว้นตอนพิมพ์ในช่องกรอกข้อมูล</DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4">
+          <section>
+            <h3 className="mb-1 text-xs font-medium text-muted-foreground">ทั่วไป</h3>
+            {row(
+              "ค้นหาคำสั่งหรือหน้า",
+              <KbdGroup>
+                <Kbd>⌘</Kbd>
+                <Kbd>K</Kbd>
+              </KbdGroup>,
+            )}
+            {row("ค้นหาในหน้านี้", <Kbd>/</Kbd>)}
+            {row(
+              "ย่อ/ขยายเมนูข้าง",
+              <KbdGroup>
+                <Kbd>⌘</Kbd>
+                <Kbd>B</Kbd>
+              </KbdGroup>,
+            )}
+            {row("ล้างรายการที่เลือกในตาราง", <Kbd>Esc</Kbd>)}
+            {row("แสดงคีย์ลัด", <Kbd>?</Kbd>)}
+          </section>
+          <section>
+            <h3 className="mb-1 text-xs font-medium text-muted-foreground">ไปที่หน้า</h3>
+            {pages.map((p) =>
+              row(
+                p.label,
+                <KbdGroup then>
+                  <Kbd>G</Kbd>
+                  <Kbd>{goKeys[p.key].toUpperCase()}</Kbd>
+                </KbdGroup>,
+              ),
+            )}
+          </section>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
 
 /**
  * Block: the standard Ecsight app frame — collapsible sidebar with animated
@@ -121,6 +233,13 @@ export function AppShell({
     setActiveState(key)
     onNavigate?.(key)
   }
+  const [paletteOpen, setPaletteOpen] = React.useState(false)
+  const [helpOpen, setHelpOpen] = React.useState(false)
+  useAppShortcuts({
+    onNavigate: navigate,
+    togglePalette: () => setPaletteOpen((o) => !o),
+    openHelp: () => setHelpOpen(true),
+  })
 
   return (
     <SidebarProvider>
@@ -132,7 +251,7 @@ export function AppShell({
                 <div className="grid size-8 shrink-0 place-items-center">
                   <LogoMark className="size-6" />
                 </div>
-                <div className="grid flex-1 text-left leading-tight">
+                <div className="grid flex-1 text-left leading-snug">
                   <span className="truncate text-sm font-semibold">Ecsight</span>
                   <span className="truncate text-xs text-muted-foreground">Workspace</span>
                 </div>
@@ -151,7 +270,7 @@ export function AppShell({
                 <Avatar className="size-8 rounded-lg">
                   <AvatarFallback className="rounded-lg">ปท</AvatarFallback>
                 </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
+                <div className="grid flex-1 text-left text-sm leading-snug">
                   <span className="truncate font-medium">ปิยะ ทีมงาน</span>
                   <span className="truncate text-xs text-muted-foreground">piya@ecsight.example</span>
                 </div>
@@ -162,7 +281,14 @@ export function AppShell({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <TopBar breadcrumb={breadcrumb} />
+        <TopBar
+          breadcrumb={breadcrumb}
+          paletteOpen={paletteOpen}
+          setPaletteOpen={setPaletteOpen}
+          onNavigate={navigate}
+          onShowShortcuts={() => setHelpOpen(true)}
+        />
+        <ShortcutsDialog open={helpOpen} onOpenChange={setHelpOpen} />
         <div className="flex flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6">{children}</div>
       </SidebarInset>
     </SidebarProvider>
@@ -220,20 +346,19 @@ function NavGroup({
   )
 }
 
-function TopBar({ breadcrumb }: { breadcrumb: string[] }) {
-  const [open, setOpen] = React.useState(false)
-
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen((o) => !o)
-      }
-    }
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [])
-
+function TopBar({
+  breadcrumb,
+  paletteOpen: open,
+  setPaletteOpen: setOpen,
+  onNavigate,
+  onShowShortcuts,
+}: {
+  breadcrumb: string[]
+  paletteOpen: boolean
+  setPaletteOpen: (open: boolean) => void
+  onNavigate: (key: string) => void
+  onShowShortcuts: () => void
+}) {
   return (
     <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 rounded-t-xl border-b bg-background/80 px-4 backdrop-blur">
       <SidebarTrigger className="-ml-1" />
@@ -263,7 +388,10 @@ function TopBar({ breadcrumb }: { breadcrumb: string[] }) {
         >
           <MagnifierIcon className="mx-auto sm:mx-0" />
           <span className="hidden sm:inline">ค้นหา…</span>
-          <kbd className="ml-auto hidden rounded border bg-muted px-1.5 font-mono text-[0.7rem] sm:inline">⌘K</kbd>
+          <KbdGroup className="ml-auto hidden sm:inline-flex">
+            <Kbd>⌘</Kbd>
+            <Kbd>K</Kbd>
+          </KbdGroup>
         </Button>
         <ThemeToggle />
         <Notifications />
@@ -285,6 +413,8 @@ function TopBar({ breadcrumb }: { breadcrumb: string[] }) {
               <SettingsIcon /> ตั้งค่า
             </DropdownMenuItem>
             <DropdownMenuSeparator />
+            <DensityMenu />
+            <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive">
               <Logout2Icon /> ออกจากระบบ
             </DropdownMenuItem>
@@ -292,25 +422,49 @@ function TopBar({ breadcrumb }: { breadcrumb: string[] }) {
         </DropdownMenu>
       </div>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="พิมพ์เพื่อค้นหาคำสั่งหรือหน้า…" />
-        <CommandList>
-          <CommandEmpty>ไม่พบผลลัพธ์</CommandEmpty>
-          <CommandGroup heading="ไปที่หน้า">
-            {defaultNav.map((item) => (
-              <CommandItem key={item.key} onSelect={() => setOpen(false)}>
-                <item.icon />
-                {item.label}
+        {/* shadcn v4 CommandDialog does not wrap children in <Command> — without it cmdk crashes */}
+        <Command>
+          <CommandInput placeholder="พิมพ์เพื่อค้นหาคำสั่งหรือหน้า…" />
+          <CommandList>
+            <CommandEmpty>ไม่พบผลลัพธ์</CommandEmpty>
+            <CommandGroup heading="ไปที่หน้า">
+              {[...defaultNav, ...secondaryNav].map((item) => (
+                <CommandItem
+                  key={item.key}
+                  onSelect={() => {
+                    setOpen(false)
+                    onNavigate(item.key)
+                  }}
+                >
+                  <item.icon />
+                  {item.label}
+                  {goKeys[item.key] && (
+                    <CommandShortcut>
+                      <KbdGroup then>
+                        <Kbd>G</Kbd>
+                        <Kbd>{goKeys[item.key].toUpperCase()}</Kbd>
+                      </KbdGroup>
+                    </CommandShortcut>
+                  )}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+            <CommandGroup heading="ความช่วยเหลือ">
+              <CommandItem
+                onSelect={() => {
+                  setOpen(false)
+                  onShowShortcuts()
+                }}
+              >
+                <KeyboardIcon />
+                คีย์ลัดทั้งหมด
+                <CommandShortcut>
+                  <Kbd>?</Kbd>
+                </CommandShortcut>
               </CommandItem>
-            ))}
-          </CommandGroup>
-          <CommandGroup heading="การตั้งค่า">
-            <CommandItem onSelect={() => setOpen(false)}>
-              <SettingsIcon />
-              ตั้งค่าระบบ
-              <CommandShortcut>⌘,</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
+            </CommandGroup>
+          </CommandList>
+        </Command>
       </CommandDialog>
     </header>
   )
@@ -330,7 +484,12 @@ function Notifications() {
       <Tooltip>
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative" aria-label={`การแจ้งเตือน ยังไม่อ่าน ${unread.length}`}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative"
+              aria-label={`การแจ้งเตือน ยังไม่อ่าน ${unread.length}`}
+            >
               <Icon as={BellIcon} activeAs={BellBold} active={unread.length > 0} />
               <CountBadge count={unread.length} className="absolute -top-0.5 -right-0.5" />
             </Button>
@@ -377,13 +536,31 @@ function Notifications() {
   )
 }
 
+/** Account-menu section: comfortable (36px controls) vs compact (32px, tighter table rows) */
+function DensityMenu() {
+  const [density, setDensity] = useDensity()
+  return (
+    <>
+      <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">ความหนาแน่น</DropdownMenuLabel>
+      <DropdownMenuRadioGroup value={density} onValueChange={(v) => setDensity(v as Density)}>
+        <DropdownMenuRadioItem value="comfortable" onSelect={(e) => e.preventDefault()}>
+          สบายตา
+        </DropdownMenuRadioItem>
+        <DropdownMenuRadioItem value="compact" onSelect={(e) => e.preventDefault()}>
+          กระชับ
+        </DropdownMenuRadioItem>
+      </DropdownMenuRadioGroup>
+    </>
+  )
+}
+
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
   // false during SSR/hydration, true after — avoids a theme-dependent hydration mismatch
   const mounted = React.useSyncExternalStore(
     () => () => {},
     () => true,
-    () => false
+    () => false,
   )
   const dark = mounted && resolvedTheme === "dark"
 

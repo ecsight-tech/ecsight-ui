@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Thai_Looped } from "next/font/google";
 
 import { Providers } from "@/components/providers";
+import { densityScript } from "@/hooks/use-density";
 import "./globals.css";
 
 const plexSans = IBM_Plex_Sans({
@@ -34,6 +35,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${plexSans.variable} ${plexThai.variable} ${plexMono.variable} h-full`}
     >
+      <head>
+        {/* applies the saved table/control density before first paint */}
+        <script dangerouslySetInnerHTML={{ __html: densityScript }} />
+      </head>
       <body className="flex min-h-full flex-col">
         <Providers>{children}</Providers>
       </body>
